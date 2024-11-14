@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import { UseUserProfileResponse } from '../types/type';
 import { UserProfileData } from '../types/type';
@@ -8,20 +9,18 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
   const [userData, setUserData] = useState<UserProfileData | null>(null);
   const [completedGames, setCompletedGames] = useState<UserCompletedGame[] | null>(null);
   const [userAwards, setUserAwards] = useState<UserAward[] | null>(null);
-  const [loading, setLoading] = useState<boolean>(true); 
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [gameInfo, setGameInfo] = useState<any | null>(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
       setLoading(true);
 
       const profileApiKey = import.meta.env.VITE_API_KEY_PROFILE;
-      const awardsApiKey = import.meta.env.VITE_API_KEY_AWARDS;
-      const completedGamesApiKey = import.meta.env.VITE_API_KEY_COMPLETED_GAMES;
-
       const profileUrl = `https://retroachievements.org/API/API_GetUserProfile.php?u=${username}&y=${profileApiKey}`;
-      const awardsUrl = `https://retroachievements.org/API/API_GetUserAwards.php?u=${username}&y=${awardsApiKey}`;
-      const completedGamesUrl = `https://retroachievements.org/API/API_GetUserCompletedGames.php?u=${username}&y=${completedGamesApiKey}`;
+      const awardsUrl = `https://retroachievements.org/API/API_GetUserAwards.php?u=${username}&y=${profileApiKey}`;
+      const completedGamesUrl = `https://retroachievements.org/API/API_GetUserCompletedGames.php?u=${username}&y=${profileApiKey}`;
 
       try {
         const [profileResponse, awardsResponse, completedGamesResponse] = await Promise.all([
@@ -43,7 +42,7 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
           setUserData(profileData);
           setCompletedGames(completedGamesData);
           setUserAwards(awardsData.VisibleUserAwards);
-          setError(null); 
+          setError(null);
         }
 
         setLoading(false);
@@ -57,7 +56,21 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
     fetchUserData();
   }, [username]);
 
-  return { userData, completedGames, userAwards, loading, error };
+  const fetchGameInfo = async (gameID: number) => {
+    const apiKey = import.meta.env.VITE_API_KEY_PROFILE;
+    const gameInfoUrl = `https://retroachievements.org/API/API_GetGameInfoAndUserProgress.php?g=${gameID}&u=${username}&y=${apiKey}`;
+
+    try {
+      const response = await fetch(gameInfoUrl);
+      const data = await response.json();
+      setGameInfo(data);
+    } catch (err) {
+      console.error("Error fetching game info:", err);
+      setGameInfo(null);
+    }
+  };
+
+  return { userData, completedGames, userAwards, loading, error, fetchGameInfo, gameInfo };
 };
 
 export default useUserProfile;

@@ -1,7 +1,7 @@
 const Hero = () => {
   return (
     <div
-      className="hero mt-16 mb-3"
+      className="hero mt-16 mb-3 border-b-2 border-base-300"
       style={{
         backgroundImage: "url(/hero.jpg)",
       }}

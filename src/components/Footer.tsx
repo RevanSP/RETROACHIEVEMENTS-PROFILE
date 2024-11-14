@@ -2,7 +2,7 @@ import React from 'react';
 
 const Footer: React.FC = () => {
     return (
-        <footer className="footer bg-base-200 text-base-content border-t-2 border-base-300 px-10 py-4">
+        <footer className="footer bg-base-200 text-base-content border-t-2 border-base-300 px-10 py-4 mt-10">
             <aside className="hidden md:grid grid-flow-col items-center">
                 <img src="/ra-icon.webp" className="w-14 mr-2" alt="icon" />
                 <p>
