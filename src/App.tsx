@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import useUserProfile from "./hooks/useUserProfile";
 import { UserCompletedGame } from "./types/type";
 import Navbar from "./components/Navbar";
@@ -10,7 +10,7 @@ const App = () => {
   const [username, setUsername] = useState<string>("Reiivan");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [activeGameID, setActiveGameID] = useState<number | null>(null);
-  const { userData, completedGames, userAwards, gameInfo, fetchGameInfo } = useUserProfile(username);
+  const { userData, completedGames, userAwards, gameInfo, fetchGameInfo, awardCounts } = useUserProfile(username);
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -42,6 +42,23 @@ const App = () => {
       setIsLoading(false);
     }
   }, [gameInfo]);
+
+  const [modalDescription, setModalDescription] = useState('');
+  const modalRef = useRef<HTMLDialogElement | null>(null);
+
+  const openModal = (description: string) => {
+    setModalDescription(description);
+    if (modalRef.current) {
+      modalRef.current.showModal();
+    }
+  };
+
+  const closeModal = () => {
+    if (modalRef.current) {
+      modalRef.current.close();
+    }
+  };
+
   return (
     <>
       <div className="min-h-screen flex flex-col">
@@ -115,6 +132,42 @@ const App = () => {
                       </div>
                     </>
                   )}
+                  <div className="overflow-x-auto mt-3 bg-base-100">
+                    <table className="table table-xs">
+                      <thead>
+                        <tr>
+                          <th>Awards</th>
+                          <th>Count</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {awardCounts && (
+                          <>
+                            <tr>
+                              <td>Total Awards</td>
+                              <td>{awardCounts.TotalAwardsCount}</td>
+                            </tr>
+                            <tr>
+                              <td>Mastery Awards</td>
+                              <td>{awardCounts.MasteryAwardsCount}</td>
+                            </tr>
+                            <tr>
+                              <td>Completion Awards</td>
+                              <td>{awardCounts.CompletionAwardsCount}</td>
+                            </tr>
+                            <tr>
+                              <td>Beaten Hardcore Awards</td>
+                              <td>{awardCounts.BeatenHardcoreAwardsCount}</td>
+                            </tr>
+                            <tr>
+                              <td>Beaten Softcore Awards</td>
+                              <td>{awardCounts.BeatenSoftcoreAwardsCount}</td>
+                            </tr>
+                          </>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
               <div className="card bg-base-200 w-full border-2 rounded-lg border-base-300 mt-4 md:col-span-2">
@@ -262,7 +315,7 @@ const App = () => {
                             <td>
                               <button
                                 className="btn bg-base-100 rounded"
-                                onClick={() => handleOpenModal(game.GameID)} // Assuming 'game' is defined here
+                                onClick={() => handleOpenModal(game.GameID)}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -293,13 +346,13 @@ const App = () => {
                       <dialog
                         id={`game-modal-${game.GameID}`}
                         key={game.GameID}
-                        className={`modal ${activeGameID === game.GameID ? "modal-open" : ""}`} // Add conditional modal-open class
+                        className={`modal ${activeGameID === game.GameID ? "modal-open" : ""}`}
                       >
                         <div className="modal-box w-11/12 max-w-7xl">
                           <form method="dialog">
                             <button
                               className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                              onClick={handleCloseModal} // Close modal when clicked
+                              onClick={handleCloseModal}
                             >
                               ✕
                             </button>
@@ -330,7 +383,26 @@ const App = () => {
                                     <p><strong>Achievements:</strong> {gameInfo.NumAchievements}</p>
                                   </div>
                                 </div>
-                                <div className="mb-4">
+                                <div className="mb-6 text-center hidden sm:block">
+                                  <strong>In-Game Screenshot & Title Image:</strong>
+                                  <div className="flex overflow-x-auto justify-center sm:justify-between mt-4 sm:px-10">
+                                    {gameInfo.ImageIngame && (
+                                      <img
+                                        src={`https://retroachievements.org${gameInfo.ImageIngame}`}
+                                        alt={`${game.Title} In-Game Screenshot`}
+                                        className="rounded shadow-lg w-80 border-2 border-base-300 ml-24"
+                                      />
+                                    )}
+                                    {gameInfo.ImageTitle && (
+                                      <img
+                                        src={`https://retroachievements.org${gameInfo.ImageTitle}`}
+                                        alt={`${game.Title} Title Image`}
+                                        className="rounded shadow-lg w-80 border-2 border-base-300 mr-24"
+                                      />
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="mb-4 text-center block sm:hidden">
                                   <strong>In-Game Screenshot & Title Image:</strong>
                                   <div className="flex space-x-4 mt-2 overflow-x-auto">
                                     {gameInfo.ImageIngame && (
@@ -445,13 +517,23 @@ const App = () => {
                                               <td>{achievement.Description}</td>
                                               <td>{achievement.Points}</td>
                                               <td>
-                                                <div className="tooltip tooltip-left" data-tip={achievement.Description}>
-                                                  <button className="btn bg-base-100">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-question-circle-fill" viewBox="0 0 16 16">
-                                                      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247m2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z" />
-                                                    </svg>
-                                                  </button>
-                                                </div>
+                                                <button
+                                                  className="btn bg-base-100"
+                                                  onClick={() => openModal(achievement.Description)}
+                                                >
+                                                  <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    fill="currentColor"
+                                                    className="bi bi-question-circle-fill"
+                                                    viewBox="0 0 16 16"
+                                                  >
+                                                    <path
+                                                      d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247m2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z"
+                                                    />
+                                                  </svg>
+                                                </button>
                                               </td>
                                               <td>
                                                 {achievement.DateEarned ? (
@@ -484,6 +566,15 @@ const App = () => {
             </div>
           </div>
         </main>
+        <dialog id="guide_modal" ref={modalRef} className="modal">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">Achievement Description</h3>
+            <p className="py-4">{modalDescription}</p>
+          </div>
+          <form method="dialog" className="modal-backdrop">
+            <button type="button" onClick={closeModal}>Close</button>
+          </form>
+        </dialog>
         <Footer />
       </div>
     </>
