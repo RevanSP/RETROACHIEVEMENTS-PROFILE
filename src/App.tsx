@@ -5,13 +5,14 @@ import { UserCompletedGame } from "./types/type";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Hero from "./components/Hero";
+import CardUserProfile from "./components/CardUserProfile";
+import CardUserAwards from "./components/CardUserAwards";
 
 const App = () => {
   const [username, setUsername] = useState<string>("Reiivan");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [activeGameID, setActiveGameID] = useState<number | null>(null);
   const { userData, completedGames, userAwards, gameInfo, fetchGameInfo, awardCounts } = useUserProfile(username);
-
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
   };
@@ -69,202 +70,8 @@ const App = () => {
             <div className="mb-4 mt-4">
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="card bg-base-200 w-full border-2 rounded-lg border-base-300 mt-4 md:col-span-1">
-                <div className="card-body">
-                  {userData && (
-                    <>
-                      <div className="flex items-center mb-4">
-                        <div className="avatar">
-                          <div className="ring-yellow-500 ring-offset-base-100 w-28 rounded-full ring ring-offset-2">
-                            {userData.UserPic ? (
-                              <img
-                                src={`https://retroachievements.org${userData.UserPic}`}
-                                alt="User Profile"
-                              />
-                            ) : (
-                              <div className="avatar placeholder">
-                                <div className="bg-blue-600 text-neutral-content w-28 rounded-full">
-                                  <span className="text-3xl">?</span>
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        <div className="ml-5">
-                          <h2 className="card-title">{userData.User}</h2>
-                          <p>{userData.Motto}</p>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-1 gap-4">
-                        <div>
-                          <strong>Member Since:</strong>{" "}
-                          {userData.MemberSince ?
-                            new Date(userData.MemberSince).toLocaleString('en-GB', {
-                              timeZone: 'Asia/Jakarta',
-                              weekday: 'long',
-                              year: 'numeric',
-                              month: 'numeric',
-                              day: 'numeric',
-                              hour: 'numeric',
-                              minute: 'numeric',
-                              second: 'numeric',
-                              hour12: false,
-                            }) : "?"}
-                        </div>
-                        <div>
-                          <strong>Rich Presence:</strong> {userData.RichPresenceMsg || "?"}
-                        </div>
-                        <div>
-                          <strong>Last Game ID:</strong> {userData.LastGameID || "?"}
-                        </div>
-                        <div>
-                          <strong>Total Points:</strong> {userData.TotalPoints || "?"}
-                        </div>
-                        <div>
-                          <strong>Total Softcore Points:</strong> {userData.TotalSoftcorePoints || "?"}
-                        </div>
-                        <div>
-                          <strong>Total True Points:</strong> {userData.TotalTruePoints || "?"}
-                        </div>
-                        <div>
-                          <strong>User ID:</strong> {userData.ID || "?"}
-                        </div>
-                      </div>
-                    </>
-                  )}
-                  <div className="overflow-x-auto mt-3 bg-base-100">
-                    <table className="table table-xs">
-                      <thead>
-                        <tr>
-                          <th>Awards</th>
-                          <th>Count</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {awardCounts && (
-                          <>
-                            <tr>
-                              <td>Total Awards</td>
-                              <td>{awardCounts.TotalAwardsCount}</td>
-                            </tr>
-                            <tr>
-                              <td>Mastery Awards</td>
-                              <td>{awardCounts.MasteryAwardsCount}</td>
-                            </tr>
-                            <tr>
-                              <td>Completion Awards</td>
-                              <td>{awardCounts.CompletionAwardsCount}</td>
-                            </tr>
-                            <tr>
-                              <td>Beaten Hardcore Awards</td>
-                              <td>{awardCounts.BeatenHardcoreAwardsCount}</td>
-                            </tr>
-                            <tr>
-                              <td>Beaten Softcore Awards</td>
-                              <td>{awardCounts.BeatenSoftcoreAwardsCount}</td>
-                            </tr>
-                          </>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <div className="card bg-base-200 w-full border-2 rounded-lg border-base-300 mt-4 md:col-span-2">
-                <div className="card-body">
-                  <div className="overflow-x-auto">
-                    <table className="table table-xs w-full">
-                      <thead>
-                        <tr>
-                          <th className="text-center">Award Icon</th>
-                          <th className="text-center">Game Title</th>
-                          <th className="text-center">Console</th>
-                          <th className="text-center">Award Type</th>
-                          <th className="text-center">Award Date</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {userAwards && userAwards.length > 0 ? (
-                          userAwards
-                            .sort((a, b) => {
-                              const aEarned = a.AwardedAt;
-                              const bEarned = b.AwardedAt;
-                              if (!aEarned && bEarned) return -1;
-                              if (aEarned && !bEarned) return 1;
-                              if (a.AwardType === 'Mastery/Completion' && b.AwardType !== 'Mastery/Completion') return -1;
-                              if (b.AwardType === 'Mastery/Completion' && a.AwardType !== 'Mastery/Completion') return 1;
-                              if (a.AwardType === 'Game Beaten' && b.AwardType !== 'Game Beaten') return 1;
-                              if (b.AwardType === 'Game Beaten' && a.AwardType !== 'Game Beaten') return -1;
-                              return new Date(b.AwardedAt).getTime() - new Date(a.AwardedAt).getTime();
-                            })
-                            .map((award) => (
-                              <tr key={award.AwardData}>
-                                <td className="text-center">
-                                  <img
-                                    src={`https://retroachievements.org${award.ImageIcon}`}
-                                    alt={award.Title}
-                                    className="w-12 h-12 object-cover rounded-md mx-auto"
-                                  />
-                                </td>
-                                <td className="text-center">{award.Title}</td>
-                                <td className="text-center">{award.ConsoleName}</td>
-                                <td className="text-center">
-                                  {award.AwardType === "Mastery/Completion" ? (
-                                    <div className="tooltip tooltip-bottom" data-tip="MASTERY / COMPLETION">
-                                      <button className="btn bg-base-100 text-white rounded-full">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-circle-fill" viewBox="0 0 16 16">
-                                          <circle cx="8" cy="8" r="8" />
-                                        </svg>
-                                      </button>
-                                    </div>
-                                  ) : award.AwardType === "Game Beaten" ? (
-                                    <div className="tooltip tooltip-bottom" data-tip="GAME BEATEN">
-                                      <button className="btn bg-base-100 text-white rounded-full">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-circle-half" viewBox="0 0 16 16">
-                                          <path d="M8 15A7 7 0 1 0 8 1zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16" />
-                                        </svg>
-                                      </button>
-                                    </div>
-                                  ) : (
-                                    <span className="badge badge-outline rounded-md bg-neutral-700">{award.AwardType}</span>
-                                  )}
-                                </td>
-                                <td className="text-center">
-                                  {new Date(award.AwardedAt).toLocaleString('en-GB', {
-                                    timeZone: 'Asia/Jakarta',
-                                    weekday: 'long',
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric',
-                                    hour: 'numeric',
-                                    minute: 'numeric',
-                                    second: 'numeric',
-                                    hour12: false,
-                                  })}
-                                </td>
-                              </tr>
-                            ))
-                        ) : (
-                          <tr>
-                            <td colSpan={5} className="text-center py-4">
-                              No awards found.
-                            </td>
-                          </tr>
-                        )}
-                      </tbody>
-                      <tfoot>
-                        <tr>
-                          <th className="text-center">Award Icon</th>
-                          <th className="text-center">Game Title</th>
-                          <th className="text-center">Console</th>
-                          <th className="text-center">Award Type</th>
-                          <th className="text-center">Award Date</th>
-                        </tr>
-                      </tfoot>
-                    </table>
-                  </div>
-                </div>
-              </div>
+              <CardUserProfile userData={userData} awardCounts={awardCounts} />
+              {userAwards && <CardUserAwards userAwards={userAwards} />}
             </div>
             <div className="card bg-base-200 w-full border-2 rounded-lg border-base-300 mt-4">
               <div className="card-body">
@@ -288,7 +95,7 @@ const App = () => {
                           <tr key={game.GameID} className="text-center">
                             <td>{game.GameID}</td>
                             <td className="text-center">
-                              <img
+                              <img loading="lazy"
                                 src={`https://retroachievements.org${game.ImageIcon}`}
                                 alt={game.Title}
                                 className="w-12 h-12 object-cover rounded-md mx-auto"
@@ -366,7 +173,7 @@ const App = () => {
                                 <div className="flex mb-6">
                                   <div className="mr-4">
                                     {gameInfo.ImageBoxArt && (
-                                      <img
+                                      <img loading="lazy"
                                         src={`https://retroachievements.org${gameInfo.ImageBoxArt}`}
                                         alt={`${game.Title} Box Art`}
                                         className="rounded-lg shadow-lg w-48"
@@ -387,14 +194,14 @@ const App = () => {
                                   <strong>In-Game Screenshot & Title Image:</strong>
                                   <div className="flex overflow-x-auto justify-center sm:justify-between mt-4 sm:px-10">
                                     {gameInfo.ImageIngame && (
-                                      <img
+                                      <img loading="lazy"
                                         src={`https://retroachievements.org${gameInfo.ImageIngame}`}
                                         alt={`${game.Title} In-Game Screenshot`}
                                         className="rounded shadow-lg w-80 border-2 border-base-300 ml-24"
                                       />
                                     )}
                                     {gameInfo.ImageTitle && (
-                                      <img
+                                      <img loading="lazy"
                                         src={`https://retroachievements.org${gameInfo.ImageTitle}`}
                                         alt={`${game.Title} Title Image`}
                                         className="rounded shadow-lg w-80 border-2 border-base-300 mr-24"
@@ -406,14 +213,14 @@ const App = () => {
                                   <strong>In-Game Screenshot & Title Image:</strong>
                                   <div className="flex space-x-4 mt-2 overflow-x-auto">
                                     {gameInfo.ImageIngame && (
-                                      <img
+                                      <img loading="lazy"
                                         src={`https://retroachievements.org${gameInfo.ImageIngame}`}
                                         alt={`${game.Title} In-Game Screenshot`}
                                         className="rounded shadow-lg w-80 border-2 border-base-300"
                                       />
                                     )}
                                     {gameInfo.ImageTitle && (
-                                      <img
+                                      <img loading="lazy"
                                         src={`https://retroachievements.org${gameInfo.ImageTitle}`}
                                         alt={`${game.Title} Title Image`}
                                         className="rounded shadow-lg w-80 border-2 border-base-300"

@@ -1,20 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import { UseUserProfileResponse } from '../types/type';
 import { UserProfileData } from '../types/type';
 import { UserCompletedGame } from '../types/type';
 import { UserAward } from '../types/type';
-
-interface AwardCounts {
-  TotalAwardsCount: number;
-  HiddenAwardsCount: number;
-  MasteryAwardsCount: number;
-  CompletionAwardsCount: number;
-  BeatenHardcoreAwardsCount: number;
-  BeatenSoftcoreAwardsCount: number;
-  EventAwardsCount: number;
-  SiteAwardsCount: number;
-}
+import { AwardCounts } from '../types/type';
 
 const useUserProfile = (username: string): UseUserProfileResponse => {
   const [userData, setUserData] = useState<UserProfileData | null>(null);
@@ -23,10 +14,34 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [gameInfo, setGameInfo] = useState<any | null>(null);
-  const [awardCounts, setAwardCounts] = useState<AwardCounts | null>(null);  
+  const [awardCounts, setAwardCounts] = useState<AwardCounts | null>(null);
 
   const isValidUsername = (username: string): boolean => {
     return /^[a-zA-Z0-9]+$/.test(username);
+  };
+
+  const CACHE_EXPIRY_TIME = 1000 * 60 * 5;
+
+  const loadFromCache = (username: string) => {
+    const cachedData = localStorage.getItem(`userProfile_${username}`);
+    if (cachedData) {
+      const parsedData = JSON.parse(cachedData);
+      const timestamp = parsedData.timestamp;
+      const currentTime = new Date().getTime();
+
+      if (currentTime - timestamp < CACHE_EXPIRY_TIME) {
+        return parsedData.data;
+      }
+    }
+    return null;
+  };
+
+  const saveToCache = (username: string, data: any) => {
+    const cacheData = {
+      timestamp: new Date().getTime(),
+      data: data,
+    };
+    localStorage.setItem(`userProfile_${username}`, JSON.stringify(cacheData));
   };
 
   useEffect(() => {
@@ -35,7 +50,17 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
       setCompletedGames(null);
       setUserAwards(null);
       setGameInfo(null);
-      setAwardCounts(null); 
+      setAwardCounts(null);
+      setLoading(false);
+      return;
+    }
+
+    const cachedData = loadFromCache(username);
+    if (cachedData) {
+      setUserData(cachedData.userData);
+      setCompletedGames(cachedData.completedGames);
+      setUserAwards(cachedData.userAwards);
+      setAwardCounts(cachedData.awardCounts);
       setLoading(false);
       return;
     }
@@ -64,7 +89,7 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
           setUserData(null);
           setCompletedGames(null);
           setUserAwards(null);
-          setAwardCounts(null); 
+          setAwardCounts(null);
         } else {
           setUserData(profileData);
           setCompletedGames(completedGamesData);
@@ -78,8 +103,24 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
             BeatenSoftcoreAwardsCount: awardsData.BeatenSoftcoreAwardsCount,
             EventAwardsCount: awardsData.EventAwardsCount,
             SiteAwardsCount: awardsData.SiteAwardsCount,
-          });  // Set the award counts in state
+          });
           setError(null);
+
+          saveToCache(username, {
+            userData: profileData,
+            completedGames: completedGamesData,
+            userAwards: awardsData.VisibleUserAwards,
+            awardCounts: {
+              TotalAwardsCount: awardsData.TotalAwardsCount,
+              HiddenAwardsCount: awardsData.HiddenAwardsCount,
+              MasteryAwardsCount: awardsData.MasteryAwardsCount,
+              CompletionAwardsCount: awardsData.CompletionAwardsCount,
+              BeatenHardcoreAwardsCount: awardsData.BeatenHardcoreAwardsCount,
+              BeatenSoftcoreAwardsCount: awardsData.BeatenSoftcoreAwardsCount,
+              EventAwardsCount: awardsData.EventAwardsCount,
+              SiteAwardsCount: awardsData.SiteAwardsCount,
+            },
+          });
         }
 
         setLoading(false);
@@ -108,7 +149,7 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
     }
   };
 
-  return { userData, completedGames, userAwards, loading, error, fetchGameInfo, gameInfo, awardCounts }; 
+  return { userData, completedGames, userAwards, loading, error, fetchGameInfo, gameInfo, awardCounts };
 };
 
 export default useUserProfile;

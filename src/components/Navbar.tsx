@@ -7,7 +7,7 @@ const Navbar: React.FC<NavbarProps> = ({ username, onUsernameChange }) => {
             <div className="navbar-start">
                 <div className="flex-1">
                     <a className="btn btn-ghost text-xl pl-4">
-                        <img src="/ra-icon.webp" className="w-10" alt="ra-icon" />
+                        <img src="/ra-icon.webp" className="w-10" alt="ra-icon" loading="lazy" />
                     </a>
                 </div>
             </div>

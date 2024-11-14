@@ -4,7 +4,7 @@ const Footer: React.FC = () => {
     return (
         <footer className="footer bg-base-200 text-base-content border-t-2 border-base-300 px-10 py-4 mt-10">
             <aside className="hidden md:grid grid-flow-col items-center">
-                <img src="/ra-icon.webp" className="w-14 mr-2" alt="icon" />
+                <img src="/ra-icon.webp" className="w-14 mr-2" alt="icon" loading="lazy" />
                 <p>
                     RetroAchievements
                     <br />
@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
                 </p>
             </aside>
             <aside className="flex justify-between items-center w-full md:hidden">
-                <img src="/ra-icon.webp" className="-ml-4 w-14" alt="icon" />
+                <img src="/ra-icon.webp" className="-ml-4 w-14" alt="icon" loading="lazy" />
                 <p className="flex-1 text-right -mr-4">
                     RetroAchievements
                     <br />

@@ -70,3 +70,26 @@ export interface UserCompletedGame {
   ImageIcon: string;
   HardcoreMode: string;
 }
+
+export interface CardUserProfileProps {
+  userData: UserProfileData | null;
+  awardCounts: AwardCounts | null;
+}
+
+export interface SearchProps {
+  username: string;
+  onUsernameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export interface Award {
+  AwardData: string;
+  ImageIcon: string;
+  Title: string;
+  ConsoleName: string;
+  AwardType: string;
+  AwardedAt: string;
+}
+
+export interface CardUserAwardsProps {
+  userAwards: Award[];
+}

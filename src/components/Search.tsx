@@ -1,9 +1,4 @@
-import React from "react";
-
-interface SearchProps {
-  username: string;
-  onUsernameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}
+import { SearchProps } from "../types/type";
 
 const Search: React.FC<SearchProps> = ({ username, onUsernameChange }) => {
   return (
