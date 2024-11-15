@@ -104,6 +104,25 @@ const ModalGames: React.FC<ModalGamesProps> = ({
                                     )}
                                 </div>
                             </div>
+                            <div className="mb-4 text-center block sm:hidden">
+                                <strong>In-Game Screenshot & Title Image:</strong>
+                                <div className="flex space-x-4 mt-2 overflow-x-auto">
+                                    {gameInfo.ImageIngame && (
+                                        <img loading="lazy" onClick={() => handleImageClick(`https://retroachievements.org${gameInfo.ImageIngame}`)}
+                                            src={`https://retroachievements.org${gameInfo.ImageIngame}`}
+                                            alt={`${game.Title} In-Game Screenshot`}
+                                            className="rounded shadow-lg w-80 border-2 border-base-300"
+                                        />
+                                    )}
+                                    {gameInfo.ImageTitle && (
+                                        <img loading="lazy" onClick={() => handleImageClick(`https://retroachievements.org${gameInfo.ImageTitle}`)}
+                                            src={`https://retroachievements.org${gameInfo.ImageTitle}`}
+                                            alt={`${game.Title} Title Image`}
+                                            className="rounded shadow-lg w-80 border-2 border-base-300"
+                                        />
+                                    )}
+                                </div>
+                            </div>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
                                 <div className="card bg-base-300 w-full shadow-xl">
                                     <div className="card-body p-2">
