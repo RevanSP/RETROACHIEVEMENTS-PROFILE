@@ -105,7 +105,7 @@ const ModalGames: React.FC<ModalGamesProps> = ({
                                 </div>
                             </div>
                             <div className="mb-4 text-center block sm:hidden">
-                                <strong>In-Game Screenshot & Title Image:</strong>
+                                <strong>In-Game Screenshot & Title Image :</strong>
                                 <div className="flex space-x-4 mt-2 overflow-x-auto">
                                     {gameInfo.ImageIngame && (
                                         <img loading="lazy" onClick={() => handleImageClick(`https://retroachievements.org${gameInfo.ImageIngame}`)}
