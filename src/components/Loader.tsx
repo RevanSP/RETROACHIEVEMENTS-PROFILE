@@ -1,13 +1,13 @@
-interface LoaderProps {
-    isLoading: boolean;
-}
+// interface LoaderProps {
+//     isLoading: boolean;
+// }
 
-const Loader: React.FC<LoaderProps> = ({ isLoading }) => {
-    return (
-        <div className={`loader-container ${!isLoading ? "hidden" : ""}`}>
-            <div className="loader"></div>
-        </div>
-    );
-};
+// const Loader: React.FC<LoaderProps> = ({ isLoading }) => {
+//     return (
+//         <div className={`loader-container ${!isLoading ? "hidden" : ""}`}>
+//             <div className="loader"></div>
+//         </div>
+//     );
+// };
 
-export default Loader;
+// export default Loader;

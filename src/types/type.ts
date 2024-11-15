@@ -96,3 +96,65 @@ export interface Award {
 export interface CardUserAwardsProps {
   userAwards: Award[];
 }
+
+export interface Props {
+  searchQuery: string;
+  currentGames: Game[];
+  isSearching: boolean;
+  handleSearchQueryChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleOpenModal: (gameID: number) => void;
+  currentPage: number;
+  paginate: (pageNumber: number) => void;
+  pageNumbers: number[];
+  handleInputFocus: () => void;
+}
+
+export interface Game {
+  GameID: number;
+  ImageIcon: string;
+  Title: string;
+  ConsoleName: string;
+  PctWon: number;
+  NumAwarded: number;
+  MaxPossible: number;
+  HardcoreMode: string;
+}
+
+export interface ModalPreviewProps {
+  selectedImage: string | undefined;
+  isModalOpen: boolean;
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+// export interface GameInfo {
+//   ImageBoxArt?: string;
+//   Developer?: string;
+//   Publisher?: string;
+//   Genre?: string;
+//   ConsoleName?: string;
+//   Released?: string;
+//   NumDistinctPlayers?: number;
+//   NumAchievements?: number;
+//   ImageIngame?: string;
+//   ImageTitle?: string;
+//   UserCompletion?: string;
+//   UserCompletionHardcore?: string;
+//   NumAwardedToUser?: number;
+//   NumAwardedToUserHardcore?: number;
+//   NumDistinctPlayersCasual?: number;
+//   NumDistinctPlayersHardcore?: number;
+//   GuideURL?: string;
+//   ForumTopicID?: string;
+//   ID?: number;
+//   Achievements?: Record<string, any>;
+// }
+
+// export interface ModalGamesProps {
+//   game: any;
+//   activeGameID: number | null;
+//   isLoading: boolean;
+//   gameInfo: GameInfo | null;
+//   sortedAchievements: any[];
+//   handleImageClick: (imageUrl: string) => void;
+//   handleCloseModal: () => void;
+// }
