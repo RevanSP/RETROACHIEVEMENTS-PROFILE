@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface UserProfileData {
   User: string;
   UserPic: string | null;
@@ -20,17 +19,6 @@ export interface NavbarProps {
   isSearching?: boolean;
 }
 
-export interface UserCompletedGame {
-  GameID: number;
-  Title: string;
-  ImageIcon: string;
-  PctWon: number;
-  ConsoleName: string;
-  NumAwarded: number;
-  MaxPossible: number;
-  HardcoreMode: string;
-}
-
 export interface UserAward {
   AwardData: string;
   Title: string;
@@ -38,17 +26,6 @@ export interface UserAward {
   AwardType: string;
   AwardedAt: string;
   ImageIcon: string;
-}
-
-export interface UseUserProfileResponse {
-  awardCounts: AwardCounts | null;
-  userData: UserProfileData | null;
-  completedGames: UserCompletedGame[] | null;
-  userAwards: UserAward[] | null;
-  loading: boolean;
-  error: string | null;
-  fetchGameInfo: (gameID: number) => Promise<void>;
-  gameInfo: any | null;
 }
 
 export interface AwardCounts {
@@ -60,17 +37,6 @@ export interface AwardCounts {
   BeatenSoftcoreAwardsCount: number;
   EventAwardsCount: number;
   SiteAwardsCount: number;
-}
-
-export interface UserCompletedGame {
-  GameID: number;
-  Title: string;
-  ConsoleName: string;
-  PctWon: number;
-  NumAwarded: number;
-  MaxPossible: number;
-  ImageIcon: string;
-  HardcoreMode: string;
 }
 
 export interface CardUserProfileProps {
@@ -109,6 +75,10 @@ export interface Props {
   handleInputFocus: () => void;
 }
 
+export interface LoaderProps {
+  isFadingOut: boolean;
+}
+
 export interface Game {
   GameID: number;
   ImageIcon: string;
@@ -126,35 +96,81 @@ export interface ModalPreviewProps {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-// export interface GameInfo {
-//   ImageBoxArt?: string;
-//   Developer?: string;
-//   Publisher?: string;
-//   Genre?: string;
-//   ConsoleName?: string;
-//   Released?: string;
-//   NumDistinctPlayers?: number;
-//   NumAchievements?: number;
-//   ImageIngame?: string;
-//   ImageTitle?: string;
-//   UserCompletion?: string;
-//   UserCompletionHardcore?: string;
-//   NumAwardedToUser?: number;
-//   NumAwardedToUserHardcore?: number;
-//   NumDistinctPlayersCasual?: number;
-//   NumDistinctPlayersHardcore?: number;
-//   GuideURL?: string;
-//   ForumTopicID?: string;
-//   ID?: number;
-//   Achievements?: Record<string, any>;
-// }
+export interface CachedUserProfileData {
+  userData: UserProfileData | null;
+  completedGames: UserCompletedGame[] | null;
+  userAwards: UserAward[] | null;
+  awardCounts: AwardCounts | null;
+}
 
-// export interface ModalGamesProps {
-//   game: any;
-//   activeGameID: number | null;
-//   isLoading: boolean;
-//   gameInfo: GameInfo | null;
-//   sortedAchievements: any[];
-//   handleImageClick: (imageUrl: string) => void;
-//   handleCloseModal: () => void;
-// }
+export interface GameInfo {
+  NumDistinctPlayers: string;
+  ID: number;
+  Title: string;
+  ConsoleID: number;
+  ConsoleName: string;
+  ForumTopicID: number;
+  Flags: number | null;
+  ImageIcon: string;
+  ImageTitle: string;
+  ImageIngame: string;
+  ImageBoxArt: string;
+  Publisher: string;
+  Developer: string;
+  Genre: string;
+  Released: string;
+  GameTitle: string;
+  Console: string;
+  RichPresencePatch: string;
+  NumAchievements: number;
+  NumDistinctPlayersCasual: number;
+  NumDistinctPlayersHardcore: number;
+  NumAwardedToUser: number;
+  NumAwardedToUserHardcore: number;
+  UserCompletion: string;
+  UserCompletionHardcore: string;
+  GuideURL?: string;
+  Achievements: {
+    [key: string]: Achievement;
+  };
+}
+
+export interface ModalGamesProps {
+  game: UserCompletedGame;
+  gameInfo: GameInfo | null;
+  isLoading: boolean;
+  isModalOpen: boolean;
+  handleCloseModal: () => void;
+  handleImageClick: (imageUrl: string) => void;
+  sortedAchievements: Achievement[];
+}
+
+export interface UseUserProfileResponse {
+  awardCounts: AwardCounts | null;
+  userData: UserProfileData | null;
+  completedGames: UserCompletedGame[] | null;
+  userAwards: UserAward[] | null;
+  loading: boolean;
+  error: string | null;
+  fetchGameInfo: (gameID: number) => Promise<void>;
+  gameInfo: GameInfo | null;
+}
+
+export interface UserCompletedGame {
+  GameID: number;
+  Title: string;
+  ConsoleName: string;
+  PctWon: number;
+  NumAwarded: number;
+  MaxPossible: number;
+  ImageIcon: string;
+  HardcoreMode: string;
+}
+
+export interface Achievement {
+  ID: number;
+  Title: string;
+  Description: string;
+  Points: number;
+  DateEarned: string | null;
+}

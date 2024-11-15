@@ -1,11 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useEffect } from 'react';
-import { UseUserProfileResponse } from '../types/type';
-import { UserProfileData } from '../types/type';
-import { UserCompletedGame } from '../types/type';
-import { UserAward } from '../types/type';
-import { AwardCounts } from '../types/type';
+import { useState, useEffect, useCallback } from 'react';
+import { UseUserProfileResponse, UserProfileData, UserCompletedGame, UserAward, AwardCounts, GameInfo, CachedUserProfileData } from '../types/type';
 
 const useUserProfile = (username: string): UseUserProfileResponse => {
   const [userData, setUserData] = useState<UserProfileData | null>(null);
@@ -13,16 +7,24 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
   const [userAwards, setUserAwards] = useState<UserAward[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [gameInfo, setGameInfo] = useState<any | null>(null);
+  const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
   const [awardCounts, setAwardCounts] = useState<AwardCounts | null>(null);
 
   const isValidUsername = (username: string): boolean => {
     return /^[a-zA-Z0-9]+$/.test(username);
   };
 
-  const CACHE_EXPIRY_TIME = 1000 * 60 * 5;
+  const saveToCache = (username: string, data: CachedUserProfileData) => {
+    const cacheData = {
+      timestamp: new Date().getTime(),
+      data: data,
+    };
+    localStorage.setItem(`userProfile_${username}`, JSON.stringify(cacheData));
+  };
 
-  const loadFromCache = (username: string) => {
+  const loadFromCache = useCallback((username: string) => {
+    const CACHE_EXPIRY_TIME = 1000 * 60 * 5;
+
     const cachedData = localStorage.getItem(`userProfile_${username}`);
     if (cachedData) {
       const parsedData = JSON.parse(cachedData);
@@ -34,15 +36,7 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
       }
     }
     return null;
-  };
-
-  const saveToCache = (username: string, data: any) => {
-    const cacheData = {
-      timestamp: new Date().getTime(),
-      data: data,
-    };
-    localStorage.setItem(`userProfile_${username}`, JSON.stringify(cacheData));
-  };
+  }, []); // No dependencies now
 
   useEffect(() => {
     if (!username || !isValidUsername(username)) {
@@ -132,7 +126,7 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
     };
 
     fetchUserData();
-  }, [username]);
+  }, [username, loadFromCache]);
 
   const fetchGameInfo = async (gameID: number) => {
     if (!gameID) return;

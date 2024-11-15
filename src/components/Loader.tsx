@@ -1,13 +1,12 @@
-// interface LoaderProps {
-//     isLoading: boolean;
-// }
+import styles from '../Loader.module.css';
+import { LoaderProps } from '../types/type';
 
-// const Loader: React.FC<LoaderProps> = ({ isLoading }) => {
-//     return (
-//         <div className={`loader-container ${!isLoading ? "hidden" : ""}`}>
-//             <div className="loader"></div>
-//         </div>
-//     );
-// };
+const Loader: React.FC<LoaderProps> = ({ isFadingOut }) => {
+  return (
+    <div className={`${styles.loaderContainer} ${isFadingOut ? styles.hidden : ''}`}>
+      <div className={styles.loader}></div>
+    </div>
+  );
+};
 
-// export default Loader;
+export default Loader;
