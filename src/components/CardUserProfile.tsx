@@ -1,7 +1,7 @@
 import React from 'react';
 import { CardUserProfileProps } from '../types/type';
 
-const CardUserProfile: React.FC<CardUserProfileProps> = ({ userData, awardCounts }) => {
+const CardUserProfile: React.FC<CardUserProfileProps> = ({ userData, awardCounts, onImageClick }) => {
     return (
         <div className="card bg-base-200 w-full border-2 rounded-lg border-base-300 mt-4 md:col-span-1">
             <div className="card-body">
@@ -11,9 +11,12 @@ const CardUserProfile: React.FC<CardUserProfileProps> = ({ userData, awardCounts
                             <div className="avatar">
                                 <div className="ring-yellow-500 ring-offset-base-100 w-28 rounded-full ring ring-offset-2">
                                     {userData.UserPic ? (
-                                        <img loading="lazy"
+                                        <img
+                                            loading="lazy"
                                             src={`https://retroachievements.org${userData.UserPic}`}
                                             alt="User Profile"
+                                            className="cursor-pointer"
+                                            onClick={() => onImageClick(`https://retroachievements.org${userData.UserPic}`)} // Call the passed function
                                         />
                                     ) : (
                                         <div className="avatar placeholder">
@@ -31,7 +34,7 @@ const CardUserProfile: React.FC<CardUserProfileProps> = ({ userData, awardCounts
                         </div>
                         <div className="grid grid-cols-1 gap-4">
                             <div>
-                                <strong>Member Since:</strong>{" "}
+                                <strong>Member Since :</strong>{" "}
                                 {userData.MemberSince
                                     ? new Date(userData.MemberSince).toLocaleString('en-GB', {
                                         timeZone: 'Asia/Jakarta',
@@ -47,22 +50,22 @@ const CardUserProfile: React.FC<CardUserProfileProps> = ({ userData, awardCounts
                                     : "?"}
                             </div>
                             <div>
-                                <strong>Rich Presence:</strong> {userData.RichPresenceMsg || "?"}
+                                <strong>Rich Presence :</strong> {userData.RichPresenceMsg || "?"}
                             </div>
                             <div>
-                                <strong>Last Game ID:</strong> {userData.LastGameID || "?"}
+                                <strong>Last Game ID :</strong> {userData.LastGameID || "?"}
                             </div>
                             <div>
-                                <strong>Total Points:</strong> {userData.TotalPoints || "?"}
+                                <strong>Total Points :</strong> {userData.TotalPoints || "?"}
                             </div>
                             <div>
-                                <strong>Total Softcore Points:</strong> {userData.TotalSoftcorePoints || "?"}
+                                <strong>Total Softcore Points :</strong> {userData.TotalSoftcorePoints || "?"}
                             </div>
                             <div>
-                                <strong>Total True Points:</strong> {userData.TotalTruePoints || "?"}
+                                <strong>Total True Points :</strong> {userData.TotalTruePoints || "?"}
                             </div>
                             <div>
-                                <strong>User ID:</strong> {userData.ID || "?"}
+                                <strong>User ID :</strong> {userData.ID || "?"}
                             </div>
                         </div>
                     </>

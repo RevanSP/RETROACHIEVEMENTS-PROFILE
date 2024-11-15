@@ -15,7 +15,9 @@ export interface UserProfileData {
 
 export interface NavbarProps {
   username: string;
-  onUsernameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onUsernameChange: (username: string) => void;
+  onSearchClick: () => void;
+  isSearching?: boolean;
 }
 
 export interface UserCompletedGame {
@@ -74,6 +76,7 @@ export interface UserCompletedGame {
 export interface CardUserProfileProps {
   userData: UserProfileData | null;
   awardCounts: AwardCounts | null;
+  onImageClick: (imageUrl: string) => void;
 }
 
 export interface SearchProps {

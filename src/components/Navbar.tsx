@@ -1,7 +1,10 @@
-import React from 'react';
 import { NavbarProps } from '../types/type';
 
-const Navbar: React.FC<NavbarProps> = ({ username, onUsernameChange }) => {
+const Navbar: React.FC<NavbarProps> = ({ username,
+    onUsernameChange,
+    onSearchClick,
+    isSearching = false }) => {
+
     return (
         <div className="navbar bg-base-200 border-b-2 border-base-300 fixed top-0 left-0 w-full z-10">
             <div className="navbar-start">
@@ -12,7 +15,7 @@ const Navbar: React.FC<NavbarProps> = ({ username, onUsernameChange }) => {
                 </div>
             </div>
             <div className="navbar-center">
-                <label className="input input-bordered border-base-300 flex bg-base-100 items-center gap-2">
+                <label className="input input-sm flex bg-base-100 items-center gap-2">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 16 16"
@@ -26,10 +29,28 @@ const Navbar: React.FC<NavbarProps> = ({ username, onUsernameChange }) => {
                         className="grow"
                         id="username"
                         value={username}
-                        onChange={onUsernameChange}
+                        onChange={(e) => onUsernameChange(e.target.value)}
                         placeholder="Enter username"
                     />
                 </label>
+                <button
+                    className="btn bg-blue-700 btn-sm hover:bg-yellow-500 hover:text-black"
+                    onClick={onSearchClick}
+                    disabled={isSearching}
+                >
+                    {isSearching ? (
+                        <span className="loading loading-infinity loading-xs"></span>
+                    ) : (
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor"
+                            className="bi bi-search w-3"
+                            viewBox="0 0 16 16"
+                        >
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                        </svg>
+                    )}
+                </button>
             </div>
             <div className="navbar-end">
                 <div className="flex-none">
