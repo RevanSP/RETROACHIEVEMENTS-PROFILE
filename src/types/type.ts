@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface UserProfileData {
   User: string;
   UserPic: string | null;
@@ -60,7 +59,7 @@ export interface Award {
   AwardedAt: string;
 }
 export interface CardUserAwardsProps {
-  userAwards: UserAward[]; 
+  userAwards: UserAward[];
   getConsoleIcon: (consoleName: string) => string;
 }
 
@@ -176,13 +175,28 @@ export interface UseUserProfileResponse {
   gameInfo: GameInfo | null;
   consoleData: ConsoleData[] | null;
   fetchGameHashes: (gameID: number) => Promise<void>;
-  gameHashes: any[] | null;
   fetchAchievementDistribution: (gameID: number, hardcore?: boolean, achievementType?: number) => Promise<void>;
-  achievementDistribution: any | null;
+  achievementDistribution: AchievementDistribution | null;
+  gameHashes: GameHash[] | null;
+}
+
+export interface GameHash {
+  PatchUrl: string | null;
+  Labels: string[];
+  Name: string;
+  MD5: string;
+  id: string;
+  hash: string;
+  gameID: number;
+  consoleID: number;
+}
+
+export interface AchievementDistribution {
+  [key: string]: number;
 }
 
 export interface ConsoleData {
-  Name: string;   
+  Name: string;
   IconURL: string;
 }
 

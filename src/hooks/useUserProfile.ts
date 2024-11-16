@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useCallback } from 'react';
 import {
   UseUserProfileResponse,
@@ -7,6 +6,8 @@ import {
   UserAward,
   AwardCounts,
   GameInfo,
+  GameHash,
+  AchievementDistribution,
   ConsoleData
 } from '../types/type';
 
@@ -19,8 +20,8 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
   const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
   const [awardCounts, setAwardCounts] = useState<AwardCounts | null>(null);
   const [consoleData, setConsoleData] = useState<ConsoleData[]>([]);
-  const [gameHashes, setGameHashes] = useState<any[] | null>(null);
-  const [achievementDistribution, setAchievementDistribution] = useState<any | null>(null);
+  const [gameHashes, setGameHashes] = useState<GameHash[] | null>(null); 
+  const [achievementDistribution, setAchievementDistribution] = useState<AchievementDistribution | null>(null);
 
   const [debouncedUsername, setDebouncedUsername] = useState<string>(username);
 
