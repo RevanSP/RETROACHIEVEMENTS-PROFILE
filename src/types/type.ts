@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface UserProfileData {
   User: string;
   UserPic: string | null;
@@ -61,6 +62,14 @@ export interface Award {
 export interface CardUserAwardsProps {
   userAwards: UserAward[]; 
   getConsoleIcon: (consoleName: string) => string;
+}
+
+export interface LeaderboardEntry {
+  User: string;
+  DateSubmitted: string;
+  Score: number;
+  FormattedScore: string;
+  Rank: number;
 }
 
 export interface GroupedAward {
@@ -166,6 +175,8 @@ export interface UseUserProfileResponse {
   fetchGameInfo: (gameID: number) => Promise<void>;
   gameInfo: GameInfo | null;
   consoleData: ConsoleData[] | null;
+  fetchGameHashes: (gameID: number) => Promise<void>;
+  gameHashes: any[] | null;
 }
 
 export interface ConsoleData {

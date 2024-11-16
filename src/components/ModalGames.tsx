@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { ModalGamesProps } from '../types/type';
+import useUserProfile from '../hooks/useUserProfile';
 
 const ModalGames: React.FC<ModalGamesProps> = ({
     game,
@@ -10,7 +11,7 @@ const ModalGames: React.FC<ModalGamesProps> = ({
     handleImageClick,
     sortedAchievements,
 }) => {
-
+    const { fetchGameHashes, gameHashes } = useUserProfile(String(game.GameID));
     const modalRef = useRef<HTMLDialogElement>(null);
 
     const closeModal = () => {
@@ -21,12 +22,10 @@ const ModalGames: React.FC<ModalGamesProps> = ({
     };
 
     useEffect(() => {
-        if (isModalOpen && modalRef.current) {
-            modalRef.current.showModal();
-        } else if (!isModalOpen && modalRef.current) {
-            modalRef.current.close();
+        if (isModalOpen && game.GameID) {
+            fetchGameHashes(game.GameID);
         }
-    }, [isModalOpen]);
+    }, [isModalOpen, game.GameID, fetchGameHashes]);
 
     const renderTypeIcon = (type: string | null) => {
         let tooltipText = "";
@@ -188,9 +187,41 @@ const ModalGames: React.FC<ModalGamesProps> = ({
                                     )}
                                 </div>
                             </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
-                                <div className="card bg-base-300 w-full shadow-xl">
-                                    <div className="card-body p-2">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
+                                <div className="card bg-base-300 w-full shadow-xl flex flex-col min-h-full">
+                                    <div className="card-body p-2 flex-1">
+                                        <div className="overflow-x-auto">
+                                            <table className="table table-xs">
+                                                <thead>
+                                                    <tr>
+                                                        <th>MD5</th>
+                                                        <th>Name</th>
+                                                        <th>Labels</th>
+                                                        <th>Patch URL</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {gameHashes && gameHashes.length > 0 ? (
+                                                        gameHashes.map((hash, index) => (
+                                                            <tr key={index}>
+                                                                <td>{hash.MD5}</td>
+                                                                <td>{hash.Name}</td>
+                                                                <td>{hash.Labels ? hash.Labels.join(", ").toUpperCase() : "N/A"}</td>
+                                                                <td>{hash.PatchUrl ? <a href={hash.PatchUrl} target="_blank" rel="noopener noreferrer">Download</a> : "N/A"}</td>
+                                                            </tr>
+                                                        ))
+                                                    ) : (
+                                                        <tr>
+                                                            <td colSpan={4} className="text-center">No game hashes available</td>
+                                                        </tr>
+                                                    )}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="card bg-base-300 w-full shadow-xl flex flex-col min-h-full">
+                                    <div className="card-body p-2 flex-1">
                                         <div className="overflow-x-auto">
                                             <table className="table table-xs w-full">
                                                 <thead>
@@ -221,8 +252,9 @@ const ModalGames: React.FC<ModalGamesProps> = ({
                                         </div>
                                     </div>
                                 </div>
-                                <div className="card bg-base-300 w-full shadow-xl">
-                                    <div className="card-body p-2">
+
+                                <div className="card bg-base-300 w-full shadow-xl flex flex-col min-h-full">
+                                    <div className="card-body p-2 flex-1">
                                         <div className="overflow-x-auto">
                                             <table className="table table-xs w-full">
                                                 <thead>
@@ -266,6 +298,7 @@ const ModalGames: React.FC<ModalGamesProps> = ({
                                     </div>
                                 </div>
                             </div>
+
                             <div className="card bg-base-300 w-full shadow-xl mt-6">
                                 <div className="card-body p-2">
                                     <div className="overflow-x-auto">

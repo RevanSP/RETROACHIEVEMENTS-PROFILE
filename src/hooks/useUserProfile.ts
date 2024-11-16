@@ -1,5 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useCallback } from 'react';
-import { UseUserProfileResponse, UserProfileData, UserCompletedGame, UserAward, AwardCounts, GameInfo, ConsoleData } from '../types/type';
+import { 
+  UseUserProfileResponse, 
+  UserProfileData, 
+  UserCompletedGame, 
+  UserAward, 
+  AwardCounts, 
+  GameInfo, 
+  ConsoleData 
+} from '../types/type';
 
 const useUserProfile = (username: string): UseUserProfileResponse => {
   const [userData, setUserData] = useState<UserProfileData | null>(null);
@@ -11,6 +20,8 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
   const [awardCounts, setAwardCounts] = useState<AwardCounts | null>(null);
   const [consoleData, setConsoleData] = useState<ConsoleData[]>([]);
 
+  const [gameHashes, setGameHashes] = useState<any[] | null>(null);
+
   const [debouncedUsername, setDebouncedUsername] = useState<string>(username);
 
   const isValidUsername = (username: string): boolean => /^[a-zA-Z0-9]+$/.test(username);
@@ -20,7 +31,7 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedUsername(username);
-    }, 500); 
+    }, 500);
 
     return () => clearTimeout(timer); 
   }, [username]);
@@ -118,6 +129,26 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
     }
   }, [debouncedUsername, apiKey]);
 
+  const fetchGameHashes = useCallback(async (gameID: number) => {
+    if (!gameID) return;
+
+    const gameHashesUrl = `https://retroachievements.org/API/API_GetGameHashes.php?i=${gameID}&y=${apiKey}`;
+
+    try {
+      const response = await fetch(gameHashesUrl);
+      const data = await response.json();
+
+      if (data.Results && Array.isArray(data.Results)) {
+        setGameHashes(data.Results);
+      } else {
+        setGameHashes(null);
+      }
+    } catch (err) {
+      console.error("Error fetching game hashes:", err);
+      setGameHashes(null);
+    }
+  }, [apiKey]);
+
   return {
     userData,
     completedGames,
@@ -128,6 +159,8 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
     gameInfo,
     awardCounts,
     consoleData,
+    fetchGameHashes, 
+    gameHashes,
   };
 };
 
