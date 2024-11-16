@@ -32,7 +32,7 @@ const ModalGames: React.FC<ModalGamesProps> = ({
         let tooltipText = "";
 
         if (type === null) {
-            tooltipText = "Unknown Type"; // Teks tooltip untuk tipe null
+            tooltipText = "Unknown Type";
             return (
                 <div className="tooltip tooltip-left" data-tip={tooltipText}>
                     <button className="btn btn-ghost">

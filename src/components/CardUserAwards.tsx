@@ -43,11 +43,11 @@ const CardUserAwards: React.FC<CardUserAwardsProps> = ({ userAwards, getConsoleI
                                             <td className="text-center">{award.Title}</td>
                                             <td className="text-center">
                                                 <div className="tooltip tooltip-bottom" data-tip={award.ConsoleName}>
-                                                    <button className="btn btn-ghost">
+                                                    <button className="btn btn-ghost p-0">
                                                         <img
                                                             src={getConsoleIcon(award.ConsoleName)}
                                                             alt={award.ConsoleName}
-                                                      className="w-64 sm:w-12 h-auto object-contain"
+                                                      className="w-96 sm:w-12 h-auto object-contain"
                                                         />
                                                     </button>
                                                 </div>

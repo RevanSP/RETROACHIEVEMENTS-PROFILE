@@ -13,11 +13,12 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
 
   const isValidUsername = (username: string): boolean => /^[a-zA-Z0-9]+$/.test(username);
 
+  const apiKey = import.meta.env.VITE_API_KEY_PROFILE;
+
   useEffect(() => {
     const fetchConsoleData = async () => {
-      const consoleApiKey = import.meta.env.VITE_API_KEY_PROFILE;
-      const consoleUrl = `https://retroachievements.org/API/API_GetConsoleIDs.php?z=${username}&y=${consoleApiKey}&g=1`;
-
+      const consoleUrl = `https://retroachievements.org/API/API_GetConsoleIDs.php?z=${username}&y=${apiKey}&g=1`;
+  
       try {
         const response = await fetch(consoleUrl);
         const data = await response.json();
@@ -26,10 +27,10 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
         console.error('Error fetching console data:', err);
       }
     };
-
+  
     fetchConsoleData();
-  }, [username]);
-
+  }, [username, apiKey]);  // Add apiKey to the dependency array
+  
   useEffect(() => {
     if (!username || !isValidUsername(username)) {
       setUserData(null);
@@ -39,32 +40,31 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
       setLoading(false);
       return;
     }
-
+  
     const fetchUserData = async () => {
       setLoading(true);
-
-      const profileApiKey = import.meta.env.VITE_API_KEY_PROFILE;
-      const profileUrl = `https://retroachievements.org/API/API_GetUserProfile.php?u=${username}&y=${profileApiKey}`;
-      const awardsUrl = `https://retroachievements.org/API/API_GetUserAwards.php?u=${username}&y=${profileApiKey}`;
-      const completedGamesUrl = `https://retroachievements.org/API/API_GetUserCompletedGames.php?u=${username}&y=${profileApiKey}`;
-
+  
+      const profileUrl = `https://retroachievements.org/API/API_GetUserProfile.php?u=${username}&y=${apiKey}`;
+      const awardsUrl = `https://retroachievements.org/API/API_GetUserAwards.php?u=${username}&y=${apiKey}`;
+      const completedGamesUrl = `https://retroachievements.org/API/API_GetUserCompletedGames.php?u=${username}&y=${apiKey}`;
+  
       try {
         const [profileResponse, awardsResponse, completedGamesResponse] = await Promise.all([
           fetch(profileUrl), 
           fetch(awardsUrl), 
           fetch(completedGamesUrl)
         ]);
-
+  
         const profileData = await profileResponse.json();
         const awardsData = await awardsResponse.json();
         const completedGamesData = await completedGamesResponse.json();
-
+  
         if (profileData.Error || awardsData.Error || completedGamesData.Error) {
           setError('Error fetching user data');
           setLoading(false);
           return;
         }
-
+  
         setUserData(profileData);
         setCompletedGames(completedGamesData);
         setUserAwards(awardsData.VisibleUserAwards);
@@ -80,23 +80,22 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
         });
         setError(null);
         setLoading(false);
-
+  
       } catch (err) {
         setError('Error fetching user data');
         setLoading(false);
         console.error('Error fetching user data:', err);
       }
     };
-
+  
     fetchUserData();
-  }, [username]);
-
+  }, [username, apiKey]);  // Add apiKey to the dependency array
+  
   const fetchGameInfo = async (gameID: number) => {
     if (!gameID) return;
-
-    const apiKey = import.meta.env.VITE_API_KEY_PROFILE;
+  
     const gameInfoUrl = `https://retroachievements.org/API/API_GetGameInfoAndUserProgress.php?g=${gameID}&u=${username}&y=${apiKey}`;
-
+  
     try {
       const response = await fetch(gameInfoUrl);
       const data = await response.json();
