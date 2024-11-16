@@ -1,6 +1,11 @@
-import { useEffect, useRef } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useRef, useState } from 'react';
 import { ModalGamesProps } from '../types/type';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import useUserProfile from '../hooks/useUserProfile';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const ModalGames: React.FC<ModalGamesProps> = ({
     game,
@@ -11,8 +16,9 @@ const ModalGames: React.FC<ModalGamesProps> = ({
     handleImageClick,
     sortedAchievements,
 }) => {
-    const { fetchGameHashes, gameHashes } = useUserProfile(String(game.GameID));
+    const { fetchGameHashes, gameHashes, fetchAchievementDistribution, achievementDistribution } = useUserProfile(String(game.GameID));
     const modalRef = useRef<HTMLDialogElement>(null);
+
 
     const closeModal = () => {
         if (modalRef.current) {
@@ -24,9 +30,44 @@ const ModalGames: React.FC<ModalGamesProps> = ({
     useEffect(() => {
         if (isModalOpen && game.GameID) {
             fetchGameHashes(game.GameID);
+            fetchAchievementDistribution(game.GameID, true);
         }
-    }, [isModalOpen, game.GameID, fetchGameHashes]);
+    }, [isModalOpen, game.GameID, fetchGameHashes, fetchAchievementDistribution]);
 
+    const [chartData, setChartData] = useState<any>(null);
+
+    useEffect(() => {
+        if (achievementDistribution) {
+            const backgroundColors: string[] = [];
+            const borderColors: string[] = [];
+            Object.values(achievementDistribution).forEach((value) => {
+                const numValue = value as number;
+
+                if (numValue >= 50) {
+                    backgroundColors.push('rgba(37, 99, 235, 0.5)');
+                    borderColors.push('rgba(37, 99, 235, 1)');
+                } else {
+                    backgroundColors.push('rgba(250, 204, 21, 0.5)');
+                    borderColors.push('rgba(250, 204, 21, 1)');
+                }
+            });
+
+            const data = {
+                labels: Object.keys(achievementDistribution),
+                datasets: [
+                    {
+                        label: 'Hardcore Achievements',
+                        data: Object.values(achievementDistribution),
+                        backgroundColor: backgroundColors,
+                        borderColor: borderColors,
+                        borderWidth: 1,
+                    },
+                ],
+            };
+
+            setChartData(data);
+        }
+    }, [achievementDistribution]);
     const renderTypeIcon = (type: string | null) => {
         let tooltipText = "";
 
@@ -252,7 +293,6 @@ const ModalGames: React.FC<ModalGamesProps> = ({
                                         </div>
                                     </div>
                                 </div>
-
                                 <div className="card bg-base-300 w-full shadow-xl flex flex-col min-h-full">
                                     <div className="card-body p-2 flex-1">
                                         <div className="overflow-x-auto">
@@ -298,7 +338,6 @@ const ModalGames: React.FC<ModalGamesProps> = ({
                                     </div>
                                 </div>
                             </div>
-
                             <div className="card bg-base-300 w-full shadow-xl mt-6">
                                 <div className="card-body p-2">
                                     <div className="overflow-x-auto">
@@ -349,6 +388,43 @@ const ModalGames: React.FC<ModalGamesProps> = ({
                                             </tbody>
                                         </table>
                                     </div>
+                                </div>
+                            </div>
+                            <div className="card bg-base-300 w-full shadow-xl flex flex-col min-h-full mt-6">
+                                <div className="card-body p-2 flex-1">
+                                    {chartData ? (
+                                        <Bar
+                                            data={chartData}
+                                            options={{
+                                                responsive: true,
+                                                plugins: {
+                                                    title: {
+                                                        display: true,
+                                                        text: 'Achievement Distribution',
+                                                    },
+                                                    legend: {
+                                                        position: 'top',
+                                                    },
+                                                },
+                                                scales: {
+                                                    x: {
+                                                        title: {
+                                                            display: true,
+                                                            text: 'Achievement Level',
+                                                        },
+                                                    },
+                                                    y: {
+                                                        title: {
+                                                            display: true,
+                                                            text: 'Number of Achievements',
+                                                        },
+                                                    },
+                                                },
+                                            }}
+                                        />
+                                    ) : (
+                                        <div>Loading achievement distribution...</div>
+                                    )}
                                 </div>
                             </div>
                         </div>

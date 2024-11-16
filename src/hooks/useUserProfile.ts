@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useCallback } from 'react';
-import { 
-  UseUserProfileResponse, 
-  UserProfileData, 
-  UserCompletedGame, 
-  UserAward, 
-  AwardCounts, 
-  GameInfo, 
-  ConsoleData 
+import {
+  UseUserProfileResponse,
+  UserProfileData,
+  UserCompletedGame,
+  UserAward,
+  AwardCounts,
+  GameInfo,
+  ConsoleData
 } from '../types/type';
 
 const useUserProfile = (username: string): UseUserProfileResponse => {
@@ -19,8 +19,8 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
   const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
   const [awardCounts, setAwardCounts] = useState<AwardCounts | null>(null);
   const [consoleData, setConsoleData] = useState<ConsoleData[]>([]);
-
   const [gameHashes, setGameHashes] = useState<any[] | null>(null);
+  const [achievementDistribution, setAchievementDistribution] = useState<any | null>(null);
 
   const [debouncedUsername, setDebouncedUsername] = useState<string>(username);
 
@@ -33,7 +33,7 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
       setDebouncedUsername(username);
     }, 500);
 
-    return () => clearTimeout(timer); 
+    return () => clearTimeout(timer);
   }, [username]);
 
   useEffect(() => {
@@ -73,8 +73,8 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
 
       try {
         const [profileResponse, awardsResponse, completedGamesResponse] = await Promise.all([
-          fetch(profileUrl), 
-          fetch(awardsUrl), 
+          fetch(profileUrl),
+          fetch(awardsUrl),
           fetch(completedGamesUrl)
         ]);
 
@@ -149,6 +149,25 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
     }
   }, [apiKey]);
 
+  const fetchAchievementDistribution = useCallback(async (gameID: number) => {
+    if (!gameID) return;
+
+    const hardcoreFlag = 0;
+    const achievementTypeFlag = 3;
+
+    const achievementDistributionUrl = `https://retroachievements.org/API/API_GetAchievementDistribution.php?i=${gameID}&h=${hardcoreFlag}&f=${achievementTypeFlag}&y=${apiKey}`;
+
+    try {
+      const response = await fetch(achievementDistributionUrl);
+      const data = await response.json();
+
+      setAchievementDistribution(data);
+    } catch (err) {
+      console.error("Error fetching achievement distribution:", err);
+      setAchievementDistribution(null);
+    }
+  }, [apiKey]);
+
   return {
     userData,
     completedGames,
@@ -159,8 +178,10 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
     gameInfo,
     awardCounts,
     consoleData,
-    fetchGameHashes, 
+    fetchGameHashes,
     gameHashes,
+    fetchAchievementDistribution,
+    achievementDistribution,
   };
 };
 

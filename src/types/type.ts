@@ -177,6 +177,8 @@ export interface UseUserProfileResponse {
   consoleData: ConsoleData[] | null;
   fetchGameHashes: (gameID: number) => Promise<void>;
   gameHashes: any[] | null;
+  fetchAchievementDistribution: (gameID: number, hardcore?: boolean, achievementType?: number) => Promise<void>;
+  achievementDistribution: any | null;
 }
 
 export interface ConsoleData {
