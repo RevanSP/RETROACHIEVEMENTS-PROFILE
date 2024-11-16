@@ -70,7 +70,6 @@ const ModalGames: React.FC<ModalGamesProps> = ({
                                     <p><strong>Publisher :</strong> {gameInfo.Publisher || "N/A"}</p>
                                     <p><strong>Genre :</strong> {gameInfo.Genre || "N/A"}</p>
                                     <p><strong>Console :</strong> {gameInfo.ConsoleName || "N/A"}</p>
-                                    <p><strong>Released :</strong> {gameInfo.Released ? new Date(gameInfo.Released).toLocaleDateString() : "N/A"}</p>
                                     <p><strong>Number of Players :</strong> {gameInfo.NumDistinctPlayers || "N/A"}</p>
                                     <p><strong>Achievements :</strong> {gameInfo.NumAchievements || "N/A"}</p>
                                 </div>
@@ -96,10 +95,7 @@ const ModalGames: React.FC<ModalGamesProps> = ({
                                             src={`https://retroachievements.org${gameInfo.ImageTitle}`}
                                             alt={`${game.Title} Title Image`}
                                             className="rounded shadow-lg w-80 border-2 border-base-300 mr-24"
-                                            onClick={() => {
-                                                closeModal();
-                                                handleImageClick(`https://retroachievements.org${gameInfo.ImageTitle}`);
-                                            }}
+
                                         />
                                     )}
                                 </div>
@@ -108,17 +104,25 @@ const ModalGames: React.FC<ModalGamesProps> = ({
                                 <strong>In-Game Screenshot & Title Image :</strong>
                                 <div className="flex space-x-4 mt-2 overflow-x-auto">
                                     {gameInfo.ImageIngame && (
-                                        <img loading="lazy" onClick={() => handleImageClick(`https://retroachievements.org${gameInfo.ImageIngame}`)}
+                                        <img loading="lazy"
                                             src={`https://retroachievements.org${gameInfo.ImageIngame}`}
                                             alt={`${game.Title} In-Game Screenshot`}
                                             className="rounded shadow-lg w-80 border-2 border-base-300"
+                                            onClick={() => {
+                                                closeModal();
+                                                handleImageClick(`https://retroachievements.org${gameInfo.ImageIngame}`);
+                                            }}
                                         />
                                     )}
                                     {gameInfo.ImageTitle && (
-                                        <img loading="lazy" onClick={() => handleImageClick(`https://retroachievements.org${gameInfo.ImageTitle}`)}
+                                        <img loading="lazy"
                                             src={`https://retroachievements.org${gameInfo.ImageTitle}`}
                                             alt={`${game.Title} Title Image`}
                                             className="rounded shadow-lg w-80 border-2 border-base-300"
+                                            onClick={() => {
+                                                closeModal();
+                                                handleImageClick(`https://retroachievements.org${gameInfo.ImageTitle}`);
+                                            }}
                                         />
                                     )}
                                 </div>
@@ -151,14 +155,6 @@ const ModalGames: React.FC<ModalGamesProps> = ({
                                                         <td><strong>Hardcore Achievements Earned :</strong></td>
                                                         <td>{gameInfo.NumAwardedToUserHardcore && gameInfo.NumAchievements ? `${gameInfo.NumAwardedToUserHardcore} / ${gameInfo.NumAchievements}` : "N/A"}</td>
                                                     </tr>
-                                                    <tr>
-                                                        <td><strong>Players (Casual) :</strong></td>
-                                                        <td>{gameInfo.NumDistinctPlayersCasual || "N/A"}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><strong>Players (Hardcore) :</strong></td>
-                                                        <td>{gameInfo.NumDistinctPlayersHardcore || "N/A"}</td>
-                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -176,8 +172,18 @@ const ModalGames: React.FC<ModalGamesProps> = ({
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td><strong>Release Date :</strong></td>
-                                                        <td>{new Date(gameInfo.Released).toLocaleDateString()}</td>
+                                                        <td><strong>Release Date:</strong></td>
+                                                        <td>{new Date(gameInfo.Released).toLocaleString('en-GB', {
+                                                            weekday: 'long',
+                                                            year: 'numeric',
+                                                            month: 'long',
+                                                            day: 'numeric',
+                                                            hour: 'numeric',
+                                                            minute: 'numeric',
+                                                            second: 'numeric',
+                                                            timeZone: 'Asia/Jakarta',
+                                                            timeZoneName: 'short'
+                                                        })}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Guide URL :</strong></td>

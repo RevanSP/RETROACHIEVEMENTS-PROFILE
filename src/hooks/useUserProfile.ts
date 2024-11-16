@@ -36,7 +36,7 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
       }
     }
     return null;
-  }, []); // No dependencies now
+  }, []); 
 
   useEffect(() => {
     if (!username || !isValidUsername(username)) {

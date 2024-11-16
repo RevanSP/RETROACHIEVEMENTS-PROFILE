@@ -46,7 +46,7 @@ const CardUserAwards: React.FC<CardUserAwardsProps> = ({ userAwards }) => {
                                                 {award.AwardType === 'Mastery/Completion' ? (
                                                     <div className="tooltip tooltip-bottom" data-tip="MASTERY / COMPLETION">
                                                         <button className="btn bg-base-100 text-white rounded-full">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-circle-fill" viewBox="0 0 16 16">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-circle-fill text-blue-600" viewBox="0 0 16 16">
                                                                 <circle cx="8" cy="8" r="8" />
                                                             </svg>
                                                         </button>
@@ -54,7 +54,7 @@ const CardUserAwards: React.FC<CardUserAwardsProps> = ({ userAwards }) => {
                                                 ) : award.AwardType === 'Game Beaten' ? (
                                                     <div className="tooltip tooltip-bottom" data-tip="GAME BEATEN">
                                                         <button className="btn bg-base-100 text-white rounded-full">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-circle-half" viewBox="0 0 16 16">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-circle-half text-yellow-500" viewBox="0 0 16 16">
                                                                 <path d="M8 15A7 7 0 1 0 8 1zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16" />
                                                             </svg>
                                                         </button>
