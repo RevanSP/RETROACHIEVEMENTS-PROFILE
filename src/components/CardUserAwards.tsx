@@ -47,7 +47,7 @@ const CardUserAwards: React.FC<CardUserAwardsProps> = ({ userAwards, getConsoleI
                                                         <img
                                                             src={getConsoleIcon(award.ConsoleName)}
                                                             alt={award.ConsoleName}
-                                                        className="w-24 h-auto object-contain"
+                                                      className="w-24 sm:w-12 h-auto object-contain"
                                                         />
                                                     </button>
                                                 </div>
