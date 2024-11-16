@@ -82,32 +82,48 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
 
     const fetchUserData = async () => {
       setLoading(true);
-
+    
       const profileApiKey = import.meta.env.VITE_API_KEY_PROFILE;
       const profileUrl = `https://retroachievements.org/API/API_GetUserProfile.php?u=${username}&y=${profileApiKey}`;
       const awardsUrl = `https://retroachievements.org/API/API_GetUserAwards.php?u=${username}&y=${profileApiKey}`;
       const completedGamesUrl = `https://retroachievements.org/API/API_GetUserCompletedGames.php?u=${username}&y=${profileApiKey}`;
-
+    
       try {
-        const [profileResponse, awardsResponse, completedGamesResponse] = await Promise.all([
-          fetch(profileUrl),
-          fetch(awardsUrl),
-          fetch(completedGamesUrl)
-        ]);
-
+        const profileResponse = await fetch(profileUrl);
         const profileData = await profileResponse.json();
-        const awardsData = await awardsResponse.json();
-        const completedGamesData = await completedGamesResponse.json();
-
-        if (profileData.Error || awardsData.Error || completedGamesData.Error) {
-          setError('Error fetching user data or user not found');
+    
+        if (profileData.Error) {
+          setError('Error fetching user profile');
           setUserData(null);
           setCompletedGames(null);
           setUserAwards(null);
           setAwardCounts(null);
-        } else {
+          setLoading(false);
+          return;
+        }
+    
+        const awardsResponse = await fetch(awardsUrl);
+        const awardsData = await awardsResponse.json();
+    
+        if (awardsData.Error) {
+          setError('Error fetching user awards');
           setUserData(profileData);
-          setCompletedGames(completedGamesData);
+          setCompletedGames(null);
+          setUserAwards(null);
+          setAwardCounts(null);
+          setLoading(false);
+          return; // Stop execution if there was an error with awards data
+        }
+    
+        // Fetch completed games data
+        const completedGamesResponse = await fetch(completedGamesUrl);
+        const completedGamesData = await completedGamesResponse.json();
+    
+        // Check for any error in completed games response
+        if (completedGamesData.Error) {
+          setError('Error fetching completed games');
+          setUserData(profileData);
+          setCompletedGames(null);
           setUserAwards(awardsData.VisibleUserAwards);
           setAwardCounts({
             TotalAwardsCount: awardsData.TotalAwardsCount,
@@ -119,25 +135,41 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
             EventAwardsCount: awardsData.EventAwardsCount,
             SiteAwardsCount: awardsData.SiteAwardsCount,
           });
-          setError(null);
-
-          saveToCache(username, {
-            userData: profileData,
-            completedGames: completedGamesData,
-            userAwards: awardsData.VisibleUserAwards,
-            awardCounts: {
-              TotalAwardsCount: awardsData.TotalAwardsCount,
-              HiddenAwardsCount: awardsData.HiddenAwardsCount,
-              MasteryAwardsCount: awardsData.MasteryAwardsCount,
-              CompletionAwardsCount: awardsData.CompletionAwardsCount,
-              BeatenHardcoreAwardsCount: awardsData.BeatenHardcoreAwardsCount,
-              BeatenSoftcoreAwardsCount: awardsData.BeatenSoftcoreAwardsCount,
-              EventAwardsCount: awardsData.EventAwardsCount,
-              SiteAwardsCount: awardsData.SiteAwardsCount,
-            },
-          });
+          setLoading(false);
+          return; 
         }
-
+    
+        setUserData(profileData);
+        setCompletedGames(completedGamesData);
+        setUserAwards(awardsData.VisibleUserAwards);
+        setAwardCounts({
+          TotalAwardsCount: awardsData.TotalAwardsCount,
+          HiddenAwardsCount: awardsData.HiddenAwardsCount,
+          MasteryAwardsCount: awardsData.MasteryAwardsCount,
+          CompletionAwardsCount: awardsData.CompletionAwardsCount,
+          BeatenHardcoreAwardsCount: awardsData.BeatenHardcoreAwardsCount,
+          BeatenSoftcoreAwardsCount: awardsData.BeatenSoftcoreAwardsCount,
+          EventAwardsCount: awardsData.EventAwardsCount,
+          SiteAwardsCount: awardsData.SiteAwardsCount,
+        });
+        setError(null);
+    
+        saveToCache(username, {
+          userData: profileData,
+          completedGames: completedGamesData,
+          userAwards: awardsData.VisibleUserAwards,
+          awardCounts: {
+            TotalAwardsCount: awardsData.TotalAwardsCount,
+            HiddenAwardsCount: awardsData.HiddenAwardsCount,
+            MasteryAwardsCount: awardsData.MasteryAwardsCount,
+            CompletionAwardsCount: awardsData.CompletionAwardsCount,
+            BeatenHardcoreAwardsCount: awardsData.BeatenHardcoreAwardsCount,
+            BeatenSoftcoreAwardsCount: awardsData.BeatenSoftcoreAwardsCount,
+            EventAwardsCount: awardsData.EventAwardsCount,
+            SiteAwardsCount: awardsData.SiteAwardsCount,
+          },
+        });
+    
         setLoading(false);
       } catch (err) {
         setError('Error fetching user data');

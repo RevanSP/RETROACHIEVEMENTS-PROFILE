@@ -61,11 +61,11 @@ const CardUserCompleted: React.FC<Props> = ({
                                     <td>{game.Title}</td>
                                     <td className="text-center">
                                         <div className="tooltip tooltip-bottom" data-tip={game.ConsoleName}>
-                                            <button className="btn btn-ghost">
+                                            <button className="btn btn-ghost p-0 flex justify-center items-center">
                                                 <img
                                                     src={getConsoleIcon(game.ConsoleName)}
                                                     alt={game.ConsoleName}
-                                                    className="w-10 h-10 object-contain object-center"
+                                                    className="w-96 h-auto object-contain"
                                                 />
                                             </button>
                                         </div>
