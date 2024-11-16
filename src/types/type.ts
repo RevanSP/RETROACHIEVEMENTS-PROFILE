@@ -19,6 +19,13 @@ export interface NavbarProps {
   isSearching?: boolean;
 }
 
+export interface GameRankAndScore {
+  User: string;
+  NumAchievements: number;
+  TotalScore: number;
+  LastAward: string;
+}
+
 export interface UserAward {
   AwardData: string;
   Title: string;
@@ -178,6 +185,8 @@ export interface UseUserProfileResponse {
   fetchAchievementDistribution: (gameID: number, hardcore?: boolean, achievementType?: number) => Promise<void>;
   achievementDistribution: AchievementDistribution | null;
   gameHashes: GameHash[] | null;
+  fetchGameRankAndScore: (gameID: number) => Promise<void>; 
+  gameRankAndScore: GameRankAndScore | null; 
 }
 
 export interface GameHash {

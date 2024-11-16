@@ -19,6 +19,7 @@ const App = () => {
   const [activeGameID, setActiveGameID] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<string | undefined>(undefined);
+
   const { consoleData, userData, completedGames, userAwards, gameInfo, fetchGameInfo, awardCounts } = useUserProfile(username);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
@@ -158,7 +159,7 @@ const App = () => {
                 awardCounts={awardCounts}
                 onImageClick={handleImageClick}
               />
-              {userAwards && <CardUserAwards userAwards={userAwards}   getConsoleIcon={getConsoleIcon}  />}
+              <CardUserAwards userAwards={userAwards || []} getConsoleIcon={getConsoleIcon} />
             </div>
             <CardUserCompleted
               searchQuery={searchQuery}
@@ -169,7 +170,7 @@ const App = () => {
               currentPage={currentPage}
               paginate={paginate}
               pageNumbers={pageNumbers}
-              handleInputFocus={handleInputFocus}  getConsoleIcon={getConsoleIcon}  />
+              handleInputFocus={handleInputFocus} getConsoleIcon={getConsoleIcon} />
           </div>
         </main>
         {isModalOpen && (

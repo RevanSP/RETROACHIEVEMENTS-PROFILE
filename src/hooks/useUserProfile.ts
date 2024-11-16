@@ -8,7 +8,8 @@ import {
   GameInfo,
   GameHash,
   AchievementDistribution,
-  ConsoleData
+  ConsoleData,
+  GameRankAndScore, 
 } from '../types/type';
 
 const useUserProfile = (username: string): UseUserProfileResponse => {
@@ -22,6 +23,7 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
   const [consoleData, setConsoleData] = useState<ConsoleData[]>([]);
   const [gameHashes, setGameHashes] = useState<GameHash[] | null>(null); 
   const [achievementDistribution, setAchievementDistribution] = useState<AchievementDistribution | null>(null);
+  const [gameRankAndScore, setGameRankAndScore] = useState<GameRankAndScore | null>(null); // New state for rank and score
 
   const [debouncedUsername, setDebouncedUsername] = useState<string>(username);
 
@@ -37,6 +39,7 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
     return () => clearTimeout(timer);
   }, [username]);
 
+  // Fetch Console Data
   useEffect(() => {
     const fetchConsoleData = async () => {
       const consoleUrl = `https://retroachievements.org/API/API_GetConsoleIDs.php?z=${debouncedUsername}&y=${apiKey}&g=1`;
@@ -55,6 +58,7 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
     }
   }, [debouncedUsername, apiKey]);
 
+  // Fetch User Data, Completed Games, and Awards
   useEffect(() => {
     if (!debouncedUsername || !isValidUsername(debouncedUsername)) {
       setUserData(null);
@@ -113,6 +117,26 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
     };
 
     fetchUserData();
+  }, [debouncedUsername, apiKey]);
+
+  const fetchGameRankAndScore = useCallback(async (gameID: number) => {
+    if (!gameID || !debouncedUsername) return;
+
+    const gameRankUrl = `https://retroachievements.org/API/API_GetGameRankAndScore.php?g=${gameID}&z=${debouncedUsername}&y=${apiKey}`;
+
+    try {
+      const response = await fetch(gameRankUrl);
+      const data = await response.json();
+
+      if (data && Array.isArray(data)) {
+        setGameRankAndScore(data[0]);
+      } else {
+        setGameRankAndScore(null);
+      }
+    } catch (err) {
+      console.error('Error fetching game rank and score:', err);
+      setGameRankAndScore(null);
+    }
   }, [debouncedUsername, apiKey]);
 
   const fetchGameInfo = useCallback(async (gameID: number) => {
@@ -183,6 +207,8 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
     gameHashes,
     fetchAchievementDistribution,
     achievementDistribution,
+    fetchGameRankAndScore, 
+    gameRankAndScore,     
   };
 };
 

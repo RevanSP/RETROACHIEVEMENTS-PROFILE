@@ -5,7 +5,6 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 import useUserProfile from '../hooks/useUserProfile';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
-
 const ModalGames: React.FC<ModalGamesProps> = ({
     game,
     gameInfo,
@@ -238,10 +237,10 @@ const ModalGames: React.FC<ModalGamesProps> = ({
                                             <table className="table table-xs">
                                                 <thead>
                                                     <tr>
-                                                        <th>MD5</th>
-                                                        <th>Name</th>
-                                                        <th>Labels</th>
-                                                        <th>Patch URL</th>
+                                                        <th className="text-center">MD5</th>
+                                                        <th className="text-center">Name</th>
+                                                        <th className="text-center">Labels</th>
+                                                        <th className="text-center">Patch URL</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -259,7 +258,7 @@ const ModalGames: React.FC<ModalGamesProps> = ({
                                                                             href={hash.PatchUrl}
                                                                             target="_blank"
                                                                             rel="noopener noreferrer"
-                                                                            className="btn btn-circle bg-blue-700 font-bold text-white flex items-center justify-center w-12 h-12"
+                                                                            className="btn btn-circle bg-blue-700 font-bold text-white flex items-center justify-center"
                                                                         >
                                                                             <svg
                                                                                 xmlns="http://www.w3.org/2000/svg"
@@ -281,6 +280,14 @@ const ModalGames: React.FC<ModalGamesProps> = ({
                                                         </tr>
                                                     )}
                                                 </tbody>
+                                                <tfoot>
+                                                    <tr className="text-center">
+                                                        <th>MD5</th>
+                                                        <th>Name</th>
+                                                        <th>Labels</th>
+                                                        <th>Patch URL</th>
+                                                    </tr>
+                                                </tfoot>
                                             </table>
                                         </div>
                                     </div>
