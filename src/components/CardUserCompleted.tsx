@@ -65,7 +65,7 @@ const CardUserCompleted: React.FC<Props> = ({
                                                 <img
                                                     src={getConsoleIcon(game.ConsoleName)}
                                                     alt={game.ConsoleName}
-                                                    className="w-8 h-8 object-cover mx-auto"
+                                                  className="w-8 h-8 object-contain object-center"
                                                 />
                                             </button>
                                         </div>
