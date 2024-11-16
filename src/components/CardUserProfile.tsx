@@ -15,7 +15,7 @@ const CardUserProfile: React.FC<CardUserProfileProps> = ({ userData, awardCounts
                                             loading="lazy"
                                             src={`https://retroachievements.org${userData.UserPic}`}
                                             alt="User Profile"
-                                            className="cursor-pointer"
+                                            className="cursor-pointer transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg active:scale-95"
                                             onClick={() => onImageClick(`https://retroachievements.org${userData.UserPic}`)}
                                         />
                                     ) : (

@@ -58,10 +58,19 @@ export interface Award {
   AwardType: string;
   AwardedAt: string;
 }
-
 export interface CardUserAwardsProps {
   userAwards: UserAward[]; 
-  getConsoleIcon: (consoleName: string) => string; 
+  getConsoleIcon: (consoleName: string) => string;
+}
+
+export interface GroupedAward {
+  Title: string;
+  ImageIcon: string;
+  ConsoleName: string;
+  AwardedAt: string;
+  allAwards: UserAward[];
+  hasMastery: boolean;
+  hasBeaten: boolean;
 }
 
 export interface Props {

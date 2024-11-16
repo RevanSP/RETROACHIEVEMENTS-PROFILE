@@ -158,7 +158,7 @@ const App = () => {
                 awardCounts={awardCounts}
                 onImageClick={handleImageClick}
               />
-              {userAwards && <CardUserAwards userAwards={userAwards}  getConsoleIcon={getConsoleIcon}  />}
+              {userAwards && <CardUserAwards userAwards={userAwards}   getConsoleIcon={getConsoleIcon}  />}
             </div>
             <CardUserCompleted
               searchQuery={searchQuery}

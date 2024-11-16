@@ -84,9 +84,8 @@ const ModalGames: React.FC<ModalGamesProps> = ({
             );
         }
 
-        return null; // Return null if no type is matched
+        return null;
     };
-
 
     return (
         <dialog
@@ -287,7 +286,17 @@ const ModalGames: React.FC<ModalGamesProps> = ({
                                                         <td>{achievement.Description}</td>
                                                         <td>{achievement.Points}</td>
                                                         <td>
-                                                            <div className="tooltip tooltip-left" data-tip={achievement.DateEarned ? achievement.DateEarned : "You have not earned this achievement yet"}>
+                                                            <div className="tooltip tooltip-left" data-tip={achievement.DateEarned ? new Date(achievement.DateEarned).toLocaleString('en-GB', {
+                                                                timeZone: 'Asia/Jakarta',
+                                                                weekday: 'long',
+                                                                year: 'numeric',
+                                                                month: 'long',
+                                                                day: 'numeric',
+                                                                hour: 'numeric',
+                                                                minute: 'numeric',
+                                                                second: 'numeric',
+                                                                hour12: false
+                                                            }) : "You have not earned this achievement yet"}>
                                                                 <button className="btn btn-ghost">
                                                                     {achievement.DateEarned ? (
                                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-check-circle-fill mx-auto" viewBox="0 0 16 16">
