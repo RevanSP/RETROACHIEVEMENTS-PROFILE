@@ -1,7 +1,7 @@
 import React from 'react';
 import { CardUserAwardsProps } from '../types/type';
 
-const CardUserAwards: React.FC<CardUserAwardsProps> = ({ userAwards }) => {
+const CardUserAwards: React.FC<CardUserAwardsProps> = ({ userAwards, getConsoleIcon }) => {
     return (
         <div className="card bg-base-200 w-full border-2 rounded-lg border-base-300 mt-4 md:col-span-2">
             <div className="card-body flex justify-center items-center">
@@ -41,7 +41,17 @@ const CardUserAwards: React.FC<CardUserAwardsProps> = ({ userAwards }) => {
                                                 />
                                             </td>
                                             <td className="text-center">{award.Title}</td>
-                                            <td className="text-center">{award.ConsoleName}</td>
+                                            <td className="text-center">
+                                                <div className="tooltip tooltip-bottom" data-tip={award.ConsoleName}>
+                                                    <button className="btn btn-ghost">
+                                                        <img
+                                                            src={getConsoleIcon(award.ConsoleName)}
+                                                            alt={award.ConsoleName}
+                                                            className="w-8 h-8 object-cover mx-auto"
+                                                        />
+                                                    </button>
+                                                </div>
+                                            </td>
                                             <td className="text-center">
                                                 {award.AwardType === 'Mastery/Completion' ? (
                                                     <div className="tooltip tooltip-bottom" data-tip="MASTERY / COMPLETION">

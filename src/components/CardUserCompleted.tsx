@@ -10,7 +10,9 @@ const CardUserCompleted: React.FC<Props> = ({
     currentPage,
     paginate,
     pageNumbers,
+    getConsoleIcon,
 }) => {
+
     return (
         <div className="card bg-base-200 w-full border-2 rounded-lg border-base-300 mt-4">
             <div className="card-body">
@@ -57,7 +59,17 @@ const CardUserCompleted: React.FC<Props> = ({
                                         />
                                     </td>
                                     <td>{game.Title}</td>
-                                    <td>{game.ConsoleName}</td>
+                                    <td className="text-center">
+                                        <div className="tooltip tooltip-bottom" data-tip={game.ConsoleName}>
+                                            <button className="btn btn-ghost">
+                                                <img
+                                                    src={getConsoleIcon(game.ConsoleName)}
+                                                    alt={game.ConsoleName}
+                                                    className="w-8 h-8 object-cover mx-auto"
+                                                />
+                                            </button>
+                                        </div>
+                                    </td>
                                     <td className="text-center">
                                         <progress className="progress progress-info w-56" value={game.PctWon * 100} max="100"></progress>
                                         <div className="mt-0 text-xs">{(game.PctWon * 100).toFixed(2)}%</div>
@@ -95,7 +107,6 @@ const CardUserCompleted: React.FC<Props> = ({
                             </tr>
                         )}
                     </table>
-
                     <div className="mt-4 flex justify-center">
                         <div className="join mt-4 overflow-x-auto">
                             {pageNumbers.map((pageNumber) => (

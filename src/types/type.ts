@@ -60,12 +60,13 @@ export interface Award {
 }
 
 export interface CardUserAwardsProps {
-  userAwards: Award[];
+  userAwards: UserAward[]; 
+  getConsoleIcon: (consoleName: string) => string; 
 }
 
 export interface Props {
   searchQuery: string;
-  currentGames: Game[];
+  currentGames: UserCompletedGame[];
   isSearching: boolean;
   handleSearchQueryChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleOpenModal: (gameID: number) => void;
@@ -73,6 +74,7 @@ export interface Props {
   paginate: (pageNumber: number) => void;
   pageNumbers: number[];
   handleInputFocus: () => void;
+  getConsoleIcon: (consoleName: string) => string;
 }
 
 export interface LoaderProps {
@@ -154,6 +156,12 @@ export interface UseUserProfileResponse {
   error: string | null;
   fetchGameInfo: (gameID: number) => Promise<void>;
   gameInfo: GameInfo | null;
+  consoleData: ConsoleData[] | null;
+}
+
+export interface ConsoleData {
+  Name: string;   
+  IconURL: string;
 }
 
 export interface UserCompletedGame {

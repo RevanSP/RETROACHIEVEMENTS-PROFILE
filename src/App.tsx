@@ -19,8 +19,17 @@ const App = () => {
   const [activeGameID, setActiveGameID] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<string | undefined>(undefined);
-  const { userData, completedGames, userAwards, gameInfo, fetchGameInfo, awardCounts } = useUserProfile(username);
+  const { consoleData, userData, completedGames, userAwards, gameInfo, fetchGameInfo, awardCounts } = useUserProfile(username);
   const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const getConsoleIcon = (consoleName: string) => {
+    if (!consoleData) {
+      return '';
+    }
+
+    const console = consoleData.find(c => c.Name === consoleName);
+    return console ? console.IconURL : '';
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -149,7 +158,7 @@ const App = () => {
                 awardCounts={awardCounts}
                 onImageClick={handleImageClick}
               />
-              {userAwards && <CardUserAwards userAwards={userAwards} />}
+              {userAwards && <CardUserAwards userAwards={userAwards}  getConsoleIcon={getConsoleIcon}  />}
             </div>
             <CardUserCompleted
               searchQuery={searchQuery}
@@ -160,7 +169,7 @@ const App = () => {
               currentPage={currentPage}
               paginate={paginate}
               pageNumbers={pageNumbers}
-              handleInputFocus={handleInputFocus} />
+              handleInputFocus={handleInputFocus}  getConsoleIcon={getConsoleIcon}  />
           </div>
         </main>
         {isModalOpen && (

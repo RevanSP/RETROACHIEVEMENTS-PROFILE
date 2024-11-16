@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { UseUserProfileResponse, UserProfileData, UserCompletedGame, UserAward, AwardCounts, GameInfo, CachedUserProfileData } from '../types/type';
+import { UseUserProfileResponse, UserProfileData, UserCompletedGame, UserAward, AwardCounts, GameInfo, CachedUserProfileData, ConsoleData } from '../types/type';
 
 const useUserProfile = (username: string): UseUserProfileResponse => {
   const [userData, setUserData] = useState<UserProfileData | null>(null);
@@ -9,6 +9,7 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
   const [error, setError] = useState<string | null>(null);
   const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
   const [awardCounts, setAwardCounts] = useState<AwardCounts | null>(null);
+  const [consoleData, setConsoleData] = useState<ConsoleData[]>([]);
 
   const isValidUsername = (username: string): boolean => {
     return /^[a-zA-Z0-9]+$/.test(username);
@@ -36,7 +37,27 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
       }
     }
     return null;
-  }, []); 
+  }, []);
+
+  // Fetch console data
+  useEffect(() => {
+    const fetchConsoleData = async () => {
+      const consoleApiKey = import.meta.env.VITE_API_KEY_PROFILE;
+      const consoleUrl = `https://retroachievements.org/API/API_GetConsoleIDs.php?z=${username}&y=${consoleApiKey}&g=1`; // Fetch only game systems
+
+      try {
+        const response = await fetch(consoleUrl);
+        const data = await response.json();
+        if (data) {
+          setConsoleData(data); // Save the console data
+        }
+      } catch (err) {
+        console.error('Error fetching console data:', err);
+      }
+    };
+
+    fetchConsoleData();
+  }, [username]);
 
   useEffect(() => {
     if (!username || !isValidUsername(username)) {
@@ -143,7 +164,18 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
     }
   };
 
-  return { userData, completedGames, userAwards, loading, error, fetchGameInfo, gameInfo, awardCounts };
+  return { 
+    userData, 
+    completedGames, 
+    userAwards, 
+    loading, 
+    error, 
+    fetchGameInfo, 
+    gameInfo, 
+    awardCounts, 
+    consoleData,
+  };
 };
+
 
 export default useUserProfile;
