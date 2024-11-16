@@ -181,4 +181,5 @@ export interface Achievement {
   Description: string;
   Points: number;
   DateEarned: string | null;
+  type: 'win_condition' | 'progression' | 'missable' | 'null';
 }
