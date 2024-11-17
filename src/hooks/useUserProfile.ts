@@ -23,7 +23,7 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
   const [consoleData, setConsoleData] = useState<ConsoleData[]>([]);
   const [gameHashes, setGameHashes] = useState<GameHash[] | null>(null); 
   const [achievementDistribution, setAchievementDistribution] = useState<AchievementDistribution | null>(null);
-  const [gameRankAndScore, setGameRankAndScore] = useState<GameRankAndScore | null>(null); // New state for rank and score
+  const [gameRankAndScore, setGameRankAndScore] = useState<GameRankAndScore | null>(null); 
 
   const [debouncedUsername, setDebouncedUsername] = useState<string>(username);
 
@@ -39,7 +39,6 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
     return () => clearTimeout(timer);
   }, [username]);
 
-  // Fetch Console Data
   useEffect(() => {
     const fetchConsoleData = async () => {
       const consoleUrl = `https://retroachievements.org/API/API_GetConsoleIDs.php?z=${debouncedUsername}&y=${apiKey}&g=1`;

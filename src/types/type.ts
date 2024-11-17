@@ -172,21 +172,21 @@ export interface ModalGamesProps {
 }
 
 export interface UseUserProfileResponse {
-  awardCounts: AwardCounts | null;
   userData: UserProfileData | null;
   completedGames: UserCompletedGame[] | null;
   userAwards: UserAward[] | null;
   loading: boolean;
   error: string | null;
-  fetchGameInfo: (gameID: number) => Promise<void>;
+  fetchGameInfo: (gameID: number) => void;
   gameInfo: GameInfo | null;
-  consoleData: ConsoleData[] | null;
-  fetchGameHashes: (gameID: number) => Promise<void>;
-  fetchAchievementDistribution: (gameID: number, hardcore?: boolean, achievementType?: number) => Promise<void>;
-  achievementDistribution: AchievementDistribution | null;
+  awardCounts: AwardCounts | null;
+  consoleData?: ConsoleData[] | null; 
+  fetchGameHashes: (gameID: number) => void;
   gameHashes: GameHash[] | null;
-  fetchGameRankAndScore: (gameID: number) => Promise<void>; 
-  gameRankAndScore: GameRankAndScore | null; 
+  fetchAchievementDistribution: (gameID: number) => void;
+  achievementDistribution: AchievementDistribution | null;
+  fetchGameRankAndScore: (gameID: number) => void;
+  gameRankAndScore: GameRankAndScore | null;
 }
 
 export interface GameHash {

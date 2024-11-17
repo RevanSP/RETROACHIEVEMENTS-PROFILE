@@ -56,7 +56,7 @@ const CardUserCompleted: React.FC<Props> = ({
                                                 loading="lazy"
                                                 src={`https://retroachievements.org${game.ImageIcon}`}
                                                 alt={game.Title}
-                                                className="w-12 h-12 object-cover rounded-md mx-auto    transition-all duration-300 ease-in-out
+                                                className="w-12 h-12 object-cover rounded-md mx-auto  transition-all duration-300 ease-in-out
                hover:grayscale hover:contrast-125 
                active:grayscale"
                                             />
