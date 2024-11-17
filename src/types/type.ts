@@ -161,6 +161,14 @@ export interface GameInfo {
   };
 }
 
+export interface ConsoleData {
+  ID: number;
+  Name: string;
+  IconURL: string;
+  Active: boolean;
+  IsGameSystem: boolean;
+}
+
 export interface ModalGamesProps {
   game: UserCompletedGame;
   gameInfo: GameInfo | null;
@@ -180,7 +188,7 @@ export interface UseUserProfileResponse {
   fetchGameInfo: (gameID: number) => void;
   gameInfo: GameInfo | null;
   awardCounts: AwardCounts | null;
-  consoleData?: ConsoleData[] | null; 
+  consoleData?: ConsoleData[] | null;
   fetchGameHashes: (gameID: number) => void;
   gameHashes: GameHash[] | null;
   fetchAchievementDistribution: (gameID: number) => void;

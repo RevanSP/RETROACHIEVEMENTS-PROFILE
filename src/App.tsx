@@ -1,9 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Profile from './pages/Profile';
 import Emulator from './pages/Emulator';
-import EmulatorDetail from './pages/EmulatorDetail';  // Import EmulatorDetail page
 import Loader from './components/Loader';
 import { useState, useEffect } from 'react';
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const App = () => {
     const [isFadingOut, setIsFadingOut] = useState<boolean>(false);
@@ -23,6 +24,18 @@ const App = () => {
         };
     }, []);
 
+    useEffect(() => {
+        AOS.init({
+            duration: 1000,
+            easing: 'ease-in-out',
+            once: true, 
+        });
+
+        return () => {
+            AOS.refresh();
+        };
+    }, []);
+
     return (
         <Router>
             <div>
@@ -30,7 +43,6 @@ const App = () => {
                 <Routes>
                     <Route path="/" element={<Profile />} />
                     <Route path="/emulator" element={<Emulator />} />
-                    <Route path="/emulator/:id" element={<EmulatorDetail />} />
                 </Routes>
             </div>
         </Router>

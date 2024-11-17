@@ -9,7 +9,7 @@ import {
   GameHash,
   AchievementDistribution,
   ConsoleData,
-  GameRankAndScore, 
+  GameRankAndScore,
 } from '../types/type';
 
 const useUserProfile = (username: string): UseUserProfileResponse => {
@@ -21,11 +21,12 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
   const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
   const [awardCounts, setAwardCounts] = useState<AwardCounts | null>(null);
   const [consoleData, setConsoleData] = useState<ConsoleData[]>([]);
-  const [gameHashes, setGameHashes] = useState<GameHash[] | null>(null); 
+  const [gameHashes, setGameHashes] = useState<GameHash[] | null>(null);
   const [achievementDistribution, setAchievementDistribution] = useState<AchievementDistribution | null>(null);
-  const [gameRankAndScore, setGameRankAndScore] = useState<GameRankAndScore | null>(null); 
+  const [gameRankAndScore, setGameRankAndScore] = useState<GameRankAndScore | null>(null);
 
   const [debouncedUsername, setDebouncedUsername] = useState<string>(username);
+  const [fetched, setFetched] = useState<boolean>(false);  
 
   const isValidUsername = (username: string): boolean => /^[a-zA-Z0-9]+$/.test(username);
 
@@ -35,7 +36,6 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
     const timer = setTimeout(() => {
       setDebouncedUsername(username);
     }, 500);
-
     return () => clearTimeout(timer);
   }, [username]);
 
@@ -57,14 +57,8 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
     }
   }, [debouncedUsername, apiKey]);
 
-  // Fetch User Data, Completed Games, and Awards
   useEffect(() => {
-    if (!debouncedUsername || !isValidUsername(debouncedUsername)) {
-      setUserData(null);
-      setCompletedGames(null);
-      setUserAwards(null);
-      setAwardCounts(null);
-      setLoading(false);
+    if (!debouncedUsername || !isValidUsername(debouncedUsername) || fetched) {
       return;
     }
 
@@ -79,7 +73,7 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
         const [profileResponse, awardsResponse, completedGamesResponse] = await Promise.all([
           fetch(profileUrl),
           fetch(awardsUrl),
-          fetch(completedGamesUrl)
+          fetch(completedGamesUrl),
         ]);
 
         const profileData = await profileResponse.json();
@@ -107,6 +101,7 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
         });
         setError(null);
         setLoading(false);
+        setFetched(true); 
 
       } catch (err) {
         setError('Error fetching user data');
@@ -116,7 +111,7 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
     };
 
     fetchUserData();
-  }, [debouncedUsername, apiKey]);
+  }, [debouncedUsername, apiKey, fetched]); 
 
   const fetchGameRankAndScore = useCallback(async (gameID: number) => {
     if (!gameID || !debouncedUsername) return;
@@ -206,9 +201,11 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
     gameHashes,
     fetchAchievementDistribution,
     achievementDistribution,
-    fetchGameRankAndScore, 
-    gameRankAndScore,     
+    fetchGameRankAndScore,
+    gameRankAndScore,
   };
+
+  
 };
 
 export default useUserProfile;
