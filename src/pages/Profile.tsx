@@ -50,11 +50,11 @@ const Profile = () => {
  const filteredGames = useMemo(() => {
     if (!completedGames) return [];
     return completedGames.filter((game) => {
-      const gameIdMatch = game.GameID.toString().includes(username);
-      const titleMatch = game.Title.toLowerCase().includes(username.toLowerCase()); 
+      const gameIdMatch = game.GameID.toString().includes(searchQuery);
+      const titleMatch = game.Title.toLowerCase().includes(searchQuery.toLowerCase());
       return gameIdMatch || titleMatch;
     });
-  }, [completedGames, username]);
+  }, [completedGames, searchQuery]);
 
   const handleUsernameChange = (username: string) => {
     setSearchUsername(username);
@@ -68,6 +68,7 @@ const Profile = () => {
       setIsSearching(false);
     }
   };
+
 
   const handleOpenModal = (gameID: number) => {
     setIsLoading(true);

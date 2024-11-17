@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { NavbarProps } from '../types/type';
 
@@ -15,12 +14,6 @@ const Navbar: React.FC<NavbarProps> = ({
     };
 
     const isEmulatorRoute = location.pathname.startsWith('/emulator');
-
-    useEffect(() => {
-        if (username) {
-            localStorage.setItem('username', username);
-        }
-    }, [username]);
 
     return (
         <div className="navbar bg-base-200 border-b-2 border-base-300 fixed top-0 left-0 w-full z-10">

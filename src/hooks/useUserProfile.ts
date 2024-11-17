@@ -26,7 +26,7 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
   const [gameRankAndScore, setGameRankAndScore] = useState<GameRankAndScore | null>(null);
 
   const [debouncedUsername, setDebouncedUsername] = useState<string>(username);
-  const [fetched, setFetched] = useState<boolean>(false);  
+  const [fetched, setFetched] = useState<boolean>(false);
 
   const isValidUsername = (username: string): boolean => /^[a-zA-Z0-9]+$/.test(username);
 
@@ -38,6 +38,10 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
     }, 500);
     return () => clearTimeout(timer);
   }, [username]);
+
+  useEffect(() => {
+    setFetched(false);
+  }, [debouncedUsername]);
 
   useEffect(() => {
     const fetchConsoleData = async () => {
@@ -52,15 +56,13 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
       }
     };
 
-    if (debouncedUsername && isValidUsername(debouncedUsername)) {
+    if (debouncedUsername && isValidUsername(debouncedUsername) && !fetched) {
       fetchConsoleData();
     }
-  }, [debouncedUsername, apiKey]);
+  }, [debouncedUsername, apiKey, fetched]);
 
   useEffect(() => {
-    if (!debouncedUsername || !isValidUsername(debouncedUsername) || fetched) {
-      return;
-    }
+    if (!debouncedUsername || fetched) return;
 
     const fetchUserData = async () => {
       setLoading(true);
@@ -100,18 +102,18 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
           SiteAwardsCount: awardsData.SiteAwardsCount,
         });
         setError(null);
-        setLoading(false);
-        setFetched(true); 
-
       } catch (err) {
-        setError('Error fetching user data');
-        setLoading(false);
         console.error('Error fetching user data:', err);
+        setError('Error fetching user data');
+      }
+      finally {
+        setLoading(false);
+        setFetched(true);
       }
     };
 
     fetchUserData();
-  }, [debouncedUsername, apiKey, fetched]); 
+  }, [debouncedUsername, apiKey, fetched]);
 
   const fetchGameRankAndScore = useCallback(async (gameID: number) => {
     if (!gameID || !debouncedUsername) return;
@@ -204,8 +206,6 @@ const useUserProfile = (username: string): UseUserProfileResponse => {
     fetchGameRankAndScore,
     gameRankAndScore,
   };
-
-  
 };
 
 export default useUserProfile;
