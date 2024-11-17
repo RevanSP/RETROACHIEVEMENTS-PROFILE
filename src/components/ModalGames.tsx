@@ -28,7 +28,7 @@ const ModalGames: React.FC<ModalGamesProps> = ({
     useEffect(() => {
         if (isModalOpen && game.GameID) {
             fetchGameHashes(game.GameID);
-            fetchAchievementDistribution(game.GameID, true);
+            fetchAchievementDistribution(game.GameID);
         }
     }, [isModalOpen, game.GameID, fetchGameHashes, fetchAchievementDistribution]);
 
