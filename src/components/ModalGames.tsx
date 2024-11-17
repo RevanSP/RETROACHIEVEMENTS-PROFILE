@@ -421,13 +421,14 @@ const ModalGames: React.FC<ModalGamesProps> = ({
                                     </div>
                                 </div>
                             </div>
-                            <div className="card bg-base-300 w-full shadow-xl flex flex-col min-h-full mt-6 border-base-100 rounded-md">
+                            <div className="card bg-base-300 w-full shadow-xl flex flex-col min-h-[300px] mt-6 border-base-100 rounded-md">
                                 <div className="card-body p-2 flex-1">
                                     {chartData ? (
                                         <Bar
                                             data={chartData}
                                             options={{
                                                 responsive: true,
+                                                maintainAspectRatio: false,
                                                 plugins: {
                                                     title: {
                                                         display: true,
@@ -468,7 +469,7 @@ const ModalGames: React.FC<ModalGamesProps> = ({
                                                             text: 'Number of Users',
                                                         }
                                                     }
-                                                },
+                                                }
                                             }}
                                         />
                                     ) : (
@@ -476,6 +477,7 @@ const ModalGames: React.FC<ModalGamesProps> = ({
                                     )}
                                 </div>
                             </div>
+
                         </div>
                     ) : (
                         <p>Failed to load game info. Please try again later.</p>
