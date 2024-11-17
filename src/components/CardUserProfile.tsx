@@ -3,7 +3,7 @@ import { CardUserProfileProps } from '../types/type';
 
 const CardUserProfile: React.FC<CardUserProfileProps> = ({ userData, awardCounts, onImageClick }) => {
     return (
-        <div className="card bg-base-200 w-full border-2 rounded-lg border-base-300 mt-4 md:col-span-1">
+        <div className="card bg-base-200 w-full border-2 rounded-lg border-base-300 mt-4 md:col-span-1 ">
             <div className="card-body">
                 {userData && (
                     <>
