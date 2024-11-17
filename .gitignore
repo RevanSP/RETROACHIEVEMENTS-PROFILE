@@ -24,6 +24,3 @@ dist-ssr
 *.sw?
 
 .env
-
-test.html
-test2.html

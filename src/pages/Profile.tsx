@@ -12,7 +12,8 @@ import ModalGames from "../components/ModalGames";
 import { Achievement } from "../types/type";
 
 const Profile = () => {
-  const [username, setUsername] = useState<string>("Reiivan");
+  const savedUsername = localStorage.getItem("username") || "Reiivan";
+  const [username, setUsername] = useState<string>(savedUsername);
   const [searchUsername, setSearchUsername] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -23,6 +24,12 @@ const Profile = () => {
   const { consoleData, userData, completedGames, userAwards, gameInfo, fetchGameInfo, awardCounts } = useUserProfile(username);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
+  useEffect(() => {
+    if (username !== savedUsername) {
+      localStorage.setItem("username", username);
+    }
+  }, [username, savedUsername]);
+
   const getConsoleIcon = (consoleName: string) => {
     if (!consoleData) {
       return '';
@@ -32,13 +39,6 @@ const Profile = () => {
     return console ? console.IconURL : '';
   };
 
-  useEffect(() => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-  }, []);
-
   const handleSearchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
@@ -47,7 +47,7 @@ const Profile = () => {
     setCurrentPage(1);
   };
 
- const filteredGames = useMemo(() => {
+  const filteredGames = useMemo(() => {
     if (!completedGames) return [];
     return completedGames.filter((game) => {
       const gameIdMatch = game.GameID.toString().includes(searchQuery);
@@ -68,7 +68,6 @@ const Profile = () => {
       setIsSearching(false);
     }
   };
-
 
   const handleOpenModal = (gameID: number) => {
     setIsLoading(true);
@@ -149,7 +148,8 @@ const Profile = () => {
               currentPage={currentPage}
               paginate={paginate}
               pageNumbers={pageNumbers}
-              handleInputFocus={handleInputFocus} getConsoleIcon={getConsoleIcon} />
+              handleInputFocus={handleInputFocus} 
+              getConsoleIcon={getConsoleIcon} />
           </div>
         </main>
         {isModalOpen && (

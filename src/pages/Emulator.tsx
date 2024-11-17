@@ -48,7 +48,7 @@ const Emulator = () => {
         <div className="min-h-screen flex flex-col">
             <Navbar username="" onUsernameChange={() => { }} onSearchClick={() => { }} isSearching={false} />
             <Hero />
-            <main className="flex-grow container mx-auto px-4 my-2 -mb-4">
+            <main className="flex-grow px-4 my-2 -mb-4">
                 {loading ? (
                     <div className="flex justify-center items-center h-64">
                         <div className="loading loading-spinner loading-lg"></div>
