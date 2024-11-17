@@ -47,16 +47,14 @@ const Profile = () => {
     setCurrentPage(1);
   };
 
-  const filteredGames = useMemo(() => {
+ const filteredGames = useMemo(() => {
     if (!completedGames) return [];
-    if (!searchQuery) return completedGames;
-
     return completedGames.filter((game) => {
-      const gameIdMatch = game.GameID.toString().includes(searchQuery);
-      const titleMatch = game.Title.toLowerCase().includes(searchQuery.toLowerCase());
+      const gameIdMatch = game.GameID.toString().includes(username);
+      const titleMatch = game.Title.toLowerCase().includes(username.toLowerCase()); 
       return gameIdMatch || titleMatch;
     });
-  }, [completedGames, searchQuery]);
+  }, [completedGames, username]);
 
   const handleUsernameChange = (username: string) => {
     setSearchUsername(username);
