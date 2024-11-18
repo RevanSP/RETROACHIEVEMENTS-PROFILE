@@ -126,7 +126,10 @@ const CardUserAwards: React.FC<CardUserAwardsProps> = ({ userAwards, getConsoleI
                                             </div>
                                         </td>
                                         <td className="text-center">
-                                            <div className="tooltip tooltip-bottom" data-tip={award.hasBeaten ? 'Game Beaten' : ''}>
+                                            <div
+                                                className="tooltip tooltip-bottom"
+                                                data-tip={award.hasMastery && award.hasBeaten ? 'Game Beaten & Mastery/Completion' : award.hasBeaten ? 'Game Beaten' : ''}
+                                            >
                                                 <button className="btn bg-base-100 text-white rounded-full">
                                                     {getAwardIcon(award.hasMastery, award.hasBeaten)}
                                                 </button>
