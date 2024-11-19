@@ -399,7 +399,7 @@ const ModalGames: React.FC<ModalGamesProps> = ({
                                                                 minute: 'numeric',
                                                                 second: 'numeric',
                                                                 hour12: false
-                                                            }) : "You have not earned this achievement yet"}>
+                                                            }) : "You haven't earned this yet."}>
                                                                 <button className="btn btn-ghost">
                                                                     {achievement.DateEarned ? (
                                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-check-circle-fill mx-auto text-green-500" viewBox="0 0 16 16">
