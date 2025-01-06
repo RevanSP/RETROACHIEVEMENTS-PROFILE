@@ -32,7 +32,7 @@ const Navbar: React.FC<NavbarProps> = ({
 
             {!isEmulatorRoute && (
                 <div className="navbar-center">
-                    <label className="input input-sm flex bg-base-100 items-center gap-2">
+                    <label className="input input-xs flex bg-base-100 items-center gap-2">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 16 16"
@@ -47,11 +47,11 @@ const Navbar: React.FC<NavbarProps> = ({
                             id="username"
                             value={username}
                             onChange={(e) => onUsernameChange(e.target.value)}
-                            placeholder="Enter username"
+                            placeholder="Enter Username ..."
                         />
                     </label>
                     <button
-                        className="btn bg-blue-700 btn-sm hover:bg-yellow-500 hover:text-black"
+                        className="btn bg-blue-700 btn-xs hover:bg-yellow-500 hover:text-black"
                         onClick={onSearchClick}
                         disabled={isSearching}
                     >
