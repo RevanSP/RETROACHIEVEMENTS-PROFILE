@@ -1,4 +1,4 @@
-name: Build and Commit OpenNext Output
+name: Build and Commit OpenNext Output (Bun)
 
 on:
   push:
@@ -15,18 +15,18 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: 20
+          bun-version: "latest"
 
       - name: Install dependencies
-        run: npm ci
+        run: bun install
 
       - name: Build project
         run: |
           rm -rf .open-next .next
-          npx opennextjs-cloudflare build
+          bunx opennextjs-cloudflare build
 
       - name: Commit build output
         run: |
