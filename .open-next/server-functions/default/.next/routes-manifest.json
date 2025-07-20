@@ -42,15 +42,15 @@
   "dataRoutes": [
     {
       "page": "/",
-      "dataRouteRegex": "^/_next/data/lOiypavbVEs64Evwwf8gh/index\\.json$"
+      "dataRouteRegex": "^/_next/data/wuQUrovewnR0v912QE2vX/index\\.json$"
     },
     {
       "page": "/game/[gameId]",
       "routeKeys": {
         "nxtPgameId": "nxtPgameId"
       },
-      "dataRouteRegex": "^/_next/data/lOiypavbVEs64Evwwf8gh/game/([^/]+?)\\.json$",
-      "namedDataRouteRegex": "^/_next/data/lOiypavbVEs64Evwwf8gh/game/(?<nxtPgameId>[^/]+?)\\.json$"
+      "dataRouteRegex": "^/_next/data/wuQUrovewnR0v912QE2vX/game/([^/]+?)\\.json$",
+      "namedDataRouteRegex": "^/_next/data/wuQUrovewnR0v912QE2vX/game/(?<nxtPgameId>[^/]+?)\\.json$"
     }
   ],
   "rsc": {
