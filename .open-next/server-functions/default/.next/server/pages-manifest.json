@@ -1,0 +1,15 @@
+{
+  "/_app": "pages/_app.js",
+  "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
+  "/api/badge": "pages/api/badge.js",
+  "/api/followers": "pages/api/followers.js",
+  "/api/following": "pages/api/following.js",
+  "/api/game-detail/[gameId]": "pages/api/game-detail/[gameId].js",
+  "/api/game-progress": "pages/api/game-progress.js",
+  "/api/profile": "pages/api/profile.js",
+  "/api/want-to-play": "pages/api/want-to-play.js",
+  "/game/[gameId]": "pages/game/[gameId].js",
+  "/": "pages/index.js",
+  "/404": "pages/404.html"
+}
