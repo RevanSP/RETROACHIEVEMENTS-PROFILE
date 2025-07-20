@@ -1206,7 +1206,7 @@ export async function getServerSideProps(context) {
   console.log("Host:", host);
 
   const baseUrl = isProd
-    ? "https://retroachievements-profile.revanspstudy28.workers.dev"
+    ? "https://retroachievements.revanspstudy28.workers.dev"
     : `http://${host}`;
 
   console.log("Base URL:", baseUrl);

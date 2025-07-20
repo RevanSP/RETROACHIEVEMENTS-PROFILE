@@ -880,7 +880,7 @@ export async function getServerSideProps(context) {
   const { gameId } = context.params;
   const isProd = process.env.NODE_ENV === "production";
   const baseUrl = isProd
-    ? "https://retroachievements-profile.revanspstudy28.workers.dev"
+    ? "https://retroachievements.revanspstudy28.workers.dev"
     : `http://${context.req.headers.host}`;
 
   const targetUserParam = context.query.targetUser
