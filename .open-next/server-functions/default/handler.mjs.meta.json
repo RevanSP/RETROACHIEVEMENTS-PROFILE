@@ -4631,7 +4631,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/pages/game/[gameId].js": {
-      "bytes": 30577,
+      "bytes": 30569,
       "imports": [
         {
           "path": ".open-next/server-functions/default/node_modules/next/dist/compiled/next-server/pages.runtime.prod.js",
@@ -4672,7 +4672,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/pages/index.js": {
-      "bytes": 38110,
+      "bytes": 38102,
       "imports": [
         {
           "path": ".open-next/server-functions/default/node_modules/next/dist/compiled/next-server/pages.runtime.prod.js",
@@ -8529,10 +8529,10 @@
           "bytesInOutput": 3069
         },
         ".open-next/server-functions/default/.next/server/pages/game/[gameId].js": {
-          "bytesInOutput": 31055
+          "bytesInOutput": 31047
         },
         ".open-next/server-functions/default/.next/server/pages/index.js": {
-          "bytesInOutput": 39009
+          "bytesInOutput": 39001
         },
         ".open-next/server-functions/default/node_modules/next/dist/server/require.js": {
           "bytesInOutput": 5609
@@ -8832,7 +8832,7 @@
           "bytesInOutput": 51448
         }
       },
-      "bytes": 6202469
+      "bytes": 6202453
     }
   }
 }
