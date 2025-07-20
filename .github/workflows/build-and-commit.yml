@@ -31,6 +31,9 @@ jobs:
           RA_USERNAME: ${{ secrets.RA_USERNAME }}
           RA_API_KEY: ${{ secrets.RA_API_KEY }}
         run: |
+          echo "🔧 Build started with injected secrets"
+          echo "RA_USERNAME present: ${RA_USERNAME:+yes}"
+          echo "RA_API_KEY present: ${RA_API_KEY:+yes}"
           rm -rf .open-next .next
           bunx opennextjs-cloudflare build
 
