@@ -27,6 +27,9 @@ jobs:
         run: bun install
 
       - name: Build project
+        env:
+          RA_USERNAME: ${{ secrets.RA_USERNAME }}
+          RA_API_KEY: ${{ secrets.RA_API_KEY }}
         run: |
           rm -rf .open-next .next
           bunx opennextjs-cloudflare build
@@ -36,5 +39,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add .open-next
-          git commit -m "ci: add .open-next build output [skip ci]" || echo "No changes to commit"
+          git diff --cached --quiet || git commit -m "ci: add .open-next build output [skip ci]"
           git push
